@@ -109,4 +109,19 @@ router.post("/initiate-orderTable", async (req, res) => {
     }
 });
 
+router.post("/insert-orderTable", async (req, res) => {
+    const { orderID, customerID, weight, orderDate, departureTime, arrivalTime } = req.body;
+    const insertResult = await appService.insertOrderTable(orderID, customerID, weight, orderDate, departureTime, arrivalTime);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/orderTable', async (req, res) => {
+    const tableContent = await appService.fetchOrderTableFromDb();
+    res.json({data: tableContent});
+});
+
 module.exports = router;

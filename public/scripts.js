@@ -167,6 +167,7 @@ async function countDemotable() {
 function fetchTableData() {
     fetchAndDisplayUsers();
     fetchAndDisplayRouteTable();
+    fetchAndDisplayOrderTable();
 }
 
 async function resetTable() {
@@ -220,9 +221,9 @@ async function resetRouteTable() {
 async function insertRouteTable(event) {
     event.preventDefault();
 
-    const originValue = document.getElementById('insertOrigin').value;
-    const destinationValue = document.getElementById('insertDestination').value;
-    const distanceValue = document.getElementById('insertDistance').value;
+    const originValue = document.getElementById('insertRouteOrigin').value;
+    const destinationValue = document.getElementById('insertRouteDestination').value;
+    const distanceValue = document.getElementById('insertRouteDistance').value;
 
     const response = await fetch('/insert-routeTable', {
         method: 'POST',
@@ -278,6 +279,57 @@ async function resetOrderTable() {
     }
 }
 
+// Inserts new routes into the routeTable.
+async function insertOrderTable(event) {
+    event.preventDefault();
+
+    const orderIDValue = document.getElementById('insertOrderID').value;
+    const customerIDValue = document.getElementById('insertOrderCustomerID').value;
+    const weightValue = document.getElementById('insertOrderWeight').value;
+    const dateValue = document.getElementById('insertOrderDate').value;
+    const departureTimeValue = document.getElementById('insertOrderDepartureTime').value;
+    const arrivalTimeValue = document.getElementById('insertOrderArrivalTime').value;
+    console.log(dateValue);
+
+    const response = await fetch('/insert-orderTable', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            orderID: orderIDValue,
+            customerID: customerIDValue,
+            weight: weightValue,
+            orderDate: dateValue,
+            departureTime: departureTimeValue,
+            arrivalTime: arrivalTimeValue
+        })
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('insertResultMsgOrder');
+
+    if (responseData.success) {
+        messageElement.textContent = "Data inserted successfully!";
+        fetchTableData();
+    } else {
+        messageElement.textContent = "Error inserting data!";
+    }
+}
+
+async function fetchAndDisplayOrderTable() {
+    const tableElement = document.getElementById('orderTable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/orderTable', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const content = responseData.data;
+    populateTable(tableBody, content);
+}
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -290,4 +342,5 @@ window.onload = function() {
     // document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
     // document.getElementById("countDemotable").addEventListener("click", countDemotable);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
+    document.getElementById("insertOrderTable").addEventListener("submit", insertOrderTable);
 };

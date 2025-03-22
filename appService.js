@@ -223,6 +223,30 @@ async function initiateOrderTable() {
     });
 }
 
+async function insertOrderTable(orderID, customerID, weight, orderDate, departureTime, arrivalTime) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO ORDERTABLE (orderID, customerID, weight, orderDate, departureTime, arrivaltime) 
+            VALUES (:orderID, :customerID, :weight, TO_DATE(:orderDate, 'YYYY-MM-DD'), :departureTime, :arrivalTime)`,
+            [orderID, customerID, weight, orderDate, departureTime, arrivalTime],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}   
+
+async function fetchOrderTableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM ORDERTABLE');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchDemotableFromDb,
@@ -234,4 +258,6 @@ module.exports = {
     fetchRouteTableFromDb,
     initiateRouteTable,
     initiateOrderTable,
+    insertOrderTable,
+    fetchOrderTableFromDb,
 };
