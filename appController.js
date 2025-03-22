@@ -64,5 +64,19 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
+router.post("/insert-routeTable", async (req, res) => {
+    const { origin, destination, distance } = req.body;
+    const insertResult = await appService.insertRouteTable(origin, destination, distance);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/routeTable', async (req, res) => {
+    const tableContent = await appService.fetchRouteTableFromDb();
+    res.json({data: tableContent});
+});
 
 module.exports = router;

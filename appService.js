@@ -89,6 +89,7 @@ async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
             await connection.execute(`DROP TABLE DEMOTABLE`);
+            await connection.execute(`DROP TABLE ROUTETABLE`);
         } catch(err) {
             console.log('Table might not exist, proceeding to create...');
         }
@@ -97,6 +98,13 @@ async function initiateDemotable() {
             CREATE TABLE DEMOTABLE (
                 id NUMBER PRIMARY KEY,
                 name VARCHAR2(20)
+            )
+        `);
+        const routeTableResult = await connection.execute(`
+            CREATE TABLE ROUTETABLE (
+                origin VARCHAR2(30) PRIMARY KEY,
+                destination VARCHAR2(30),
+                distance NUMBER
             )
         `);
         return true;
@@ -142,11 +150,36 @@ async function countDemotable() {
     });
 }
 
+async function insertRouteTable(origin, destination, distance) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO ROUTETABLE (origin, destination, distance) VALUES (:origin, :destination, :distance)`,
+            [origin, destination, distance],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}   
+
+async function fetchRouteTableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM ROUTETABLE');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchDemotableFromDb,
     initiateDemotable, 
     insertDemotable, 
     updateNameDemotable, 
-    countDemotable
+    countDemotable,
+    insertRouteTable,
+    fetchRouteTableFromDb,
 };
