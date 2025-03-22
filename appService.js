@@ -210,11 +210,11 @@ async function initiateOrderTable() {
         const orderTableResult = await connection.execute(`
             CREATE TABLE ORDERTABLE (
                 orderID CHAR(8) PRIMARY KEY,
-                customerID CHAR(8) NOT NULL UNIQUE,
+                customerID CHAR(8),
                 weight NUMBER,
-                date CHAR(8),
+                orderDate DATE,
                 departureTime CHAR(8),
-                arrivalTime CHAR(8),
+                arrivalTime CHAR(8)
             )
         `);
         return true;

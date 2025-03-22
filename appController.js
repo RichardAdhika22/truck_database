@@ -101,7 +101,6 @@ router.get('/routeTable', async (req, res) => {
 // =======================
 
 router.post("/initiate-orderTable", async (req, res) => {
-    console.log("banana");
     const initiateResult = await appService.initiateOrderTable();
     if (initiateResult) {
         res.json({ success: true });
