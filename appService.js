@@ -142,8 +142,12 @@ async function countDemotable() {
     });
 }
 
-// =======================
+// =============================================================================
 // SAMPLE CODE ENDS HERE !
+// =====================================================================
+
+// =======================
+// ROUTE TABLE
 // =======================
 
 async function initiateRouteTable() {
@@ -191,6 +195,34 @@ async function fetchRouteTableFromDb() {
     });
 }
 
+// =======================
+// ORDER TABLE
+// =======================
+
+async function initiateOrderTable() {
+    return await withOracleDB(async (connection) => {
+        try {
+            await connection.execute(`DROP TABLE ORDERTABLE`);
+        } catch(err) {
+            console.log('Table might not exist, proceeding to create...');
+        }
+
+        const orderTableResult = await connection.execute(`
+            CREATE TABLE ORDERTABLE (
+                orderID CHAR(8) PRIMARY KEY,
+                customerID CHAR(8) NOT NULL UNIQUE,
+                weight NUMBER,
+                date CHAR(8),
+                departureTime CHAR(8),
+                arrivalTime CHAR(8),
+            )
+        `);
+        return true;
+    }).catch(() => {
+        return false;
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchDemotableFromDb,
@@ -201,4 +233,5 @@ module.exports = {
     insertRouteTable,
     fetchRouteTableFromDb,
     initiateRouteTable,
+    initiateOrderTable,
 };

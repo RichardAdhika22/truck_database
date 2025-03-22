@@ -30,7 +30,6 @@
     <table id="demotable" border="1">
         <thead>
             <tr>
-                <!--Table head, need to be adjusted accordingly to align with your own.-->
                 <th>ID</th>
                 <th>Name</th>
             </tr>
@@ -49,7 +48,7 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2> Insert Values into DemoTable </h2>
+    <!-- <h2> Insert Values into DemoTable </h2>
     <form id="insertDemotable">
         ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
         Name: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
@@ -58,7 +57,7 @@
     </form>
     <div id="insertResultMsg"></div>
 
-    <br><hr><br> <!-- ========================================================================= -->
+    <br><hr><br> 
 
     <h2>Update Name in DemoTable</h2>
     <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
@@ -68,15 +67,64 @@
 
         <button type="submit"> update </button> <br>
     </form>
-    <!-- A placeholder to display messages related to the update operation. -->
     <div id="updateNameResultMsg"></div>
 
-    <br><hr><br> <!-- ========================================================================= -->
+    <br><hr><br> 
 
     <h2>Count the Tuples in DemoTable</h2>
     <button id="countDemotable"> count </button> <br><br>
-    <!-- A placeholder to display the count result. -->
-    <div id="countResultMsg"></div> <br>
+    <div id="countResultMsg"></div> <br> -->
+
+    <br><hr><br>
+
+    <h2>Orders</h2>
+    <table id="orderTable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Weight</th>
+                <th>Date</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <form id="insertOrderTable">
+        <div class="tableDiv">
+            <div class="form-group">
+                <label for="insertOrderID">Order ID :</label>
+                <input type="number" id="insertOrderID" placeholder="Enter Order ID" required minlength="8" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="insertCustomerID">Customer ID: </label>
+                <input type="number" id="insertCustomerID" placeholder="Enter Customer ID" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="insertWeight">Weight: </label>
+                <input type="number" id="insertCustomerID" placeholder="Enter Item Weight (in Kg)" maxlength="10">
+            </div>
+        </div>
+        <div class="tableDiv">
+            <div class="form-group">
+                <label for="insertDate">Date :</label>
+                <input type="date" id="insertDate">
+            </div>
+            <div class="form-group">
+                <label for="insertdepartureTime">Departure Time: </label>
+                <input type="time" id="insertDepartureTime">
+            </div>
+            <div class="form-group">
+                <label for="insertArrivalTime">Arrival Time: </label>
+                <input type="time" id="insertArrivalTime">
+            </div>
+        </div>
+        <button type="submit">Add Order</button>
+    </form>
+    <div id="insertResultMsgOrder"></div>
 
     <br><hr><br>
 
@@ -94,26 +142,24 @@
         </tbody>
     </table>
     <form id="insertRouteTable">
-        <div class="routeTableDiv">
+        <div class="tableDiv">
             <div class="form-group">
                 <label for="insertOrigin">Origin: </label>
-                <input type="text" id="insertOrigin" class="routesInput" placeholder="Enter Origin Address" required maxlength="30">
+                <input type="text" id="insertOrigin"  placeholder="Enter Origin Address" required maxlength="30">
             </div>
     
             <div class="form-group">
                 <label for="insertDestination">Destination: </label>
-                <input type="text" id="insertDestination" class="routesInput" placeholder="Enter Destination Address" required maxlength="30">
+                <input type="text" id="insertDestination"  placeholder="Enter Destination Address" required maxlength="30">
             </div>
     
             <div class="form-group distanceInput">
                 <label for="insertDistance">Distance: </label>
-                <input type="number" id="insertDistance" class="routesInput" placeholder="Enter Distance (in Km)">
+                <input type="number" id="insertDistance"  placeholder="(in Km)">
             </div>
         </div>
-        <button type="submit">Add Routes</button>
+        <button type="submit">Add Route</button>
     </form>
-    
-    
     <div id="insertResultMsgRoute"></div>
 
     <!-- ===================================================================================== -->

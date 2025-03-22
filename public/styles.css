@@ -84,7 +84,7 @@ input::placeholder, textarea::placeholder {
     vertical-align: middle;
 }
 
-.routeTableDiv {
+.tableDiv {
     margin-top: 20px;
     margin-bottom: 20px;
     display: flex;
@@ -101,8 +101,9 @@ input::placeholder, textarea::placeholder {
 
 label {
     margin: 5px;
+    white-space: nowrap;
 }
 
 .distanceInput {
-    flex: 0.5;
+    flex: 0.6;
 }

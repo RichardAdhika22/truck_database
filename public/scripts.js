@@ -154,23 +154,65 @@ async function countDemotable() {
     }
 }
 
-// =======================
+// =========================================================================================
 // SAMPLE CODE ENDS HERE !
+// ==========================================================================================
+
+// =======================
+// GENERAL FUNCTIONS
 // =======================
 
-// This function resets or initializes the demotable.
-async function resetRouteTable() {
-    const response = await fetch("/initiate-routeTable", {
-        method: 'POST'
-    });
-    const responseData = await response.json();
+// General function to refresh the displayed table data. 
+// You can invoke this after any table-modifying operation to keep consistency.
+function fetchTableData() {
+    fetchAndDisplayUsers();
+    fetchAndDisplayRouteTable();
+}
 
-    if (responseData.success) {
-        const messageElement = document.getElementById('resetResultMsg');
-        messageElement.textContent = "demotable initiated successfully!";
+async function resetTable() {
+    const messageElement = document.getElementById('resetResultMsg');
+    try {
+        await resetDemotable();
+        await resetRouteTable();
+        await resetOrderTable();    
         fetchTableData();
-    } else {
-        alert("Error initiating table!");
+        messageElement.textContent = "All tables initiated successfully!";
+    } catch (err) {
+        messageElement.textContent = err.message;
+        alert(err.message);
+    }   
+}
+
+function populateTable(tableBody, tableContent) {
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    tableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+// =======================
+// ROUTE TABLE
+// =======================
+
+async function resetRouteTable() {
+    try {
+        const response = await fetch("/initiate-routeTable", {
+            method: 'POST'
+        });
+        const responseData = await response.json();
+        if (!responseData.success) {
+            throw new Error("Error initiating route table!");
+        }
+    } catch(err) {
+        throw new Error("Error initiating route table!");
     }
 }
 
@@ -214,20 +256,26 @@ async function fetchAndDisplayRouteTable() {
     });
 
     const responseData = await response.json();
-    const demotableContent = responseData.data;
+    const content = responseData.data;
+    populateTable(tableBody, content);
+}
 
-    // Always clear old, already fetched data before new fetching process.
-    if (tableBody) {
-        tableBody.innerHTML = '';
-    }
+// =======================
+// ORDER TABLE
+// =======================
 
-    demotableContent.forEach(user => {
-        const row = tableBody.insertRow();
-        user.forEach((field, index) => {
-            const cell = row.insertCell(index);
-            cell.textContent = field;
+async function resetOrderTable() {
+    try {
+        const response = await fetch("/initiate-orderTable", {
+            method: 'POST'
         });
-    });
+        const responseData = await response.json();
+        if (!responseData.success) {
+            throw new Error("Error initiating order table!");
+        }
+    } catch(err) {
+        throw new Error("Error initiating order table!");
+    }
 }
 
 
@@ -238,20 +286,8 @@ window.onload = function() {
     checkDbConnection();
     fetchTableData();
     document.getElementById("resetDemotable").addEventListener("click", resetTable);
-    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
-    document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    // document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+    // document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    // document.getElementById("countDemotable").addEventListener("click", countDemotable);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
 };
-
-// General function to refresh the displayed table data. 
-// You can invoke this after any table-modifying operation to keep consistency.
-function fetchTableData() {
-    fetchAndDisplayUsers();
-    fetchAndDisplayRouteTable();
-}
-
-async function resetTable() {
-    await resetDemotable();
-    await resetRouteTable();
-}

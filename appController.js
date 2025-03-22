@@ -64,8 +64,12 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
-// =======================
+// =========================================================================
 // SAMPLE CODE ENDS HERE !
+// ========================================================================
+
+// =======================
+// ROUTE TABLE
 // =======================
 
 router.post("/initiate-routeTable", async (req, res) => {
@@ -90,6 +94,20 @@ router.post("/insert-routeTable", async (req, res) => {
 router.get('/routeTable', async (req, res) => {
     const tableContent = await appService.fetchRouteTableFromDb();
     res.json({data: tableContent});
+});
+
+// =======================
+// ORDER TABLE
+// =======================
+
+router.post("/initiate-orderTable", async (req, res) => {
+    console.log("banana");
+    const initiateResult = await appService.initiateOrderTable();
+    if (initiateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
 });
 
 module.exports = router;
