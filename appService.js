@@ -209,8 +209,8 @@ async function initiateOrderTable() {
 
         const orderTableResult = await connection.execute(`
             CREATE TABLE ORDERTABLE (
-                orderID CHAR(8) PRIMARY KEY,
-                customerID CHAR(8),
+                orderId CHAR(8) PRIMARY KEY,
+                customerId CHAR(8) NOT NULL,
                 weight NUMBER,
                 orderDate DATE,
                 departureTime CHAR(8),
@@ -223,12 +223,12 @@ async function initiateOrderTable() {
     });
 }
 
-async function insertOrderTable(orderID, customerID, weight, orderDate, departureTime, arrivalTime) {
+async function insertOrderTable(orderId, customerId, weight, orderDate, departureTime, arrivalTime) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO ORDERTABLE (orderID, customerID, weight, orderDate, departureTime, arrivaltime) 
-            VALUES (:orderID, :customerID, :weight, TO_DATE(:orderDate, 'YYYY-MM-DD'), :departureTime, :arrivalTime)`,
-            [orderID, customerID, weight, orderDate, departureTime, arrivalTime],
+            `INSERT INTO ORDERTABLE (orderId, customerId, weight, orderDate, departureTime, arrivaltime) 
+            VALUES (:orderId, :customerId, :weight, TO_DATE(:orderDate, 'YYYY-MM-DD'), :departureTime, :arrivalTime)`,
+            [orderId, customerId, weight, orderDate, departureTime, arrivalTime],
             { autoCommit: true }
         );
 
@@ -247,6 +247,21 @@ async function fetchOrderTableFromDb() {
     });
 }
 
+async function updateCustomerIdOrderTable(oldCustomerId, newCustomerId) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `UPDATE ORDERTABLE SET customerId=:newCustomerId where customerId=:oldCustomerId`,
+            [newCustomerId, oldCustomerId],
+            { autoCommit: true }
+        );
+        
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch((err) => {
+        console.log(err);
+        return false;
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchDemotableFromDb,
@@ -260,4 +275,5 @@ module.exports = {
     initiateOrderTable,
     insertOrderTable,
     fetchOrderTableFromDb,
+    updateCustomerIdOrderTable,
 };

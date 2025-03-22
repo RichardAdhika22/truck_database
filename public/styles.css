@@ -107,3 +107,8 @@ label {
 .distanceInput {
     flex: 0.6;
 }
+
+.pageTitle {
+    text-align: center;
+    font-size: 50px;
+}

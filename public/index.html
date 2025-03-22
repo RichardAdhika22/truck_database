@@ -48,7 +48,7 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <!-- <h2> Insert Values into DemoTable </h2>
+    <h2> Insert Values into DemoTable </h2>
     <form id="insertDemotable">
         ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
         Name: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
@@ -73,15 +73,14 @@
 
     <h2>Count the Tuples in DemoTable</h2>
     <button id="countDemotable"> count </button> <br><br>
-    <div id="countResultMsg"></div> <br> -->
+    <div id="countResultMsg"></div> <br>
 
     <br><hr><br>
 
-    <h2>Orders</h2>
+    <h2 class="pageTitle">Orders</h2>
     <table id="orderTable" border="1">
         <thead>
             <tr>
-                <!--Table head, need to be adjusted accordingly to align with your own.-->
                 <th>Order ID</th>
                 <th>Customer ID</th>
                 <th>Weight</th>
@@ -93,15 +92,16 @@
         <tbody>
         </tbody>
     </table>
+    <h3>Input an order</h3>
     <form id="insertOrderTable">
         <div class="tableDiv">
             <div class="form-group">
-                <label for="insertOrderID">Order ID :</label>
-                <input type="number" id="insertOrderID" placeholder="Enter Order ID" required minlength="8" maxlength="10">
+                <label for="insertOrderId">Order ID :</label>
+                <input type="text" id="insertOrderId" placeholder="Enter Order ID" required maxlength="10">
             </div>
             <div class="form-group">
-                <label for="insertOrderCustomerID">Customer ID: </label>
-                <input type="number" id="insertOrderCustomerID" placeholder="Enter Customer ID" maxlength="10">
+                <label for="insertOrderCustomerId">Customer ID: </label>
+                <input type="text" id="insertOrderCustomerId" placeholder="Enter Customer ID" maxlength="10">
             </div>
             <div class="form-group">
                 <label for="insertOrderWeight">Weight: </label>
@@ -126,9 +126,25 @@
     </form>
     <div id="insertResultMsgOrder"></div>
 
+    <h3>Update Customer ID</h3>
+    <form id="updateCustomerIdOrderTable">
+        <div class="tableDiv">
+            <div class="form-group">
+                <label for="insertOldCustomerId">Old Customer ID :</label>
+                <input type="text" id="insertOldCustomerId" placeholder="Enter Old Customer ID" required  maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="insertNewCustomerId">New Customer ID: </label>
+                <input type="text" id="insertNewCustomerId" placeholder="Enter New Customer ID"required maxlength="10">
+            </div>
+            <button type="submit"> Update </button> <br>
+        </div>
+    </form>
+    <div id="updateCustomerIdResultMsg"></div>
+
     <br><hr><br>
 
-    <h2>Routes</h2>
+    <h2 class="pageTitle">Routes</h2>
     <table id="routeTable" border="1">
         <thead>
             <tr>
@@ -141,6 +157,7 @@
         <tbody>
         </tbody>
     </table>
+    <h3>Input a route</h3>
     <form id="insertRouteTable">
         <div class="tableDiv">
             <div class="form-group">

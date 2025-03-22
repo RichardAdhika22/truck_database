@@ -110,8 +110,8 @@ router.post("/initiate-orderTable", async (req, res) => {
 });
 
 router.post("/insert-orderTable", async (req, res) => {
-    const { orderID, customerID, weight, orderDate, departureTime, arrivalTime } = req.body;
-    const insertResult = await appService.insertOrderTable(orderID, customerID, weight, orderDate, departureTime, arrivalTime);
+    const { orderId, customerId, weight, orderDate, departureTime, arrivalTime } = req.body;
+    const insertResult = await appService.insertOrderTable(orderId, customerId, weight, orderDate, departureTime, arrivalTime);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -122,6 +122,16 @@ router.post("/insert-orderTable", async (req, res) => {
 router.get('/orderTable', async (req, res) => {
     const tableContent = await appService.fetchOrderTableFromDb();
     res.json({data: tableContent});
+});
+
+router.post("/update-customerId-orderTable", async (req, res) => {
+    const { oldCustomerId, newCustomerId } = req.body;
+    const updateResult = await appService.updateCustomerIdOrderTable(oldCustomerId, newCustomerId);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
 });
 
 module.exports = router;

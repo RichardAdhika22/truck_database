@@ -283,13 +283,13 @@ async function resetOrderTable() {
 async function insertOrderTable(event) {
     event.preventDefault();
 
-    const orderIDValue = document.getElementById('insertOrderID').value;
-    const customerIDValue = document.getElementById('insertOrderCustomerID').value;
+    const orderIdValue = document.getElementById('insertOrderId').value;
+    const customerIdValue = document.getElementById('insertOrderCustomerId').value;
     const weightValue = document.getElementById('insertOrderWeight').value;
     const dateValue = document.getElementById('insertOrderDate').value;
     const departureTimeValue = document.getElementById('insertOrderDepartureTime').value;
     const arrivalTimeValue = document.getElementById('insertOrderArrivalTime').value;
-    console.log(dateValue);
+    console.log(orderIdValue);
 
     const response = await fetch('/insert-orderTable', {
         method: 'POST',
@@ -297,8 +297,8 @@ async function insertOrderTable(event) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            orderID: orderIDValue,
-            customerID: customerIDValue,
+            orderId: orderIdValue,
+            customerId: customerIdValue,
             weight: weightValue,
             orderDate: dateValue,
             departureTime: departureTimeValue,
@@ -330,6 +330,33 @@ async function fetchAndDisplayOrderTable() {
     populateTable(tableBody, content);
 }
 
+async function updateCustomerIdOrderTable(event) {
+    event.preventDefault();
+    const oldCustomerIdValue = document.getElementById('insertOldCustomerId').value;
+    const newCustomerIdValue = document.getElementById('insertNewCustomerId').value;
+    // console.log(oldCustomerIdValue);
+    const response = await fetch('/update-customerId-orderTable', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            oldCustomerId: oldCustomerIdValue,
+            newCustomerId: newCustomerIdValue
+        })
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('updateCustomerIdResultMsg');
+
+    if (responseData.success) {
+        messageElement.textContent = "Customer ID updated successfully!";
+        fetchTableData();
+    } else {
+        messageElement.textContent = "Error updating Customer ID!";
+    }
+}
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -338,9 +365,10 @@ window.onload = function() {
     checkDbConnection();
     fetchTableData();
     document.getElementById("resetDemotable").addEventListener("click", resetTable);
-    // document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    // document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
     // document.getElementById("countDemotable").addEventListener("click", countDemotable);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
     document.getElementById("insertOrderTable").addEventListener("submit", insertOrderTable);
+    document.getElementById("updateCustomerIdOrderTable").addEventListener("submit", updateCustomerIdOrderTable);
 };
