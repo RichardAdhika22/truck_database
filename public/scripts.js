@@ -154,6 +154,26 @@ async function countDemotable() {
     }
 }
 
+// =======================
+// SAMPLE CODE ENDS HERE !
+// =======================
+
+// This function resets or initializes the demotable.
+async function resetRouteTable() {
+    const response = await fetch("/initiate-routeTable", {
+        method: 'POST'
+    });
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const messageElement = document.getElementById('resetResultMsg');
+        messageElement.textContent = "demotable initiated successfully!";
+        fetchTableData();
+    } else {
+        alert("Error initiating table!");
+    }
+}
+
 // Inserts new routes into the routeTable.
 async function insertRouteTable(event) {
     event.preventDefault();
@@ -217,7 +237,7 @@ async function fetchAndDisplayRouteTable() {
 window.onload = function() {
     checkDbConnection();
     fetchTableData();
-    document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
+    document.getElementById("resetDemotable").addEventListener("click", resetTable);
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
     document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
     document.getElementById("countDemotable").addEventListener("click", countDemotable);
@@ -229,4 +249,9 @@ window.onload = function() {
 function fetchTableData() {
     fetchAndDisplayUsers();
     fetchAndDisplayRouteTable();
+}
+
+async function resetTable() {
+    await resetDemotable();
+    await resetRouteTable();
 }

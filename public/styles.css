@@ -1,8 +1,8 @@
 /* GLOBAL STYLES */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    padding: 40px;
-    max-width: 800px;
+    padding: 20px;
+    max-width: 1000px;
     margin: auto;
     line-height: 1.6;
     background-color: #fffef5f9;
@@ -72,7 +72,6 @@ input, textarea {
     background-color: #fff;
     color: #333;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
 }
 
 input::placeholder, textarea::placeholder {
@@ -85,8 +84,25 @@ input::placeholder, textarea::placeholder {
     vertical-align: middle;
 }
 
-.routeTableForm {
-    border: 5px;
-    border-color: black;
+.routeTableDiv {
     margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between; 
+}
+
+.form-group {
+    display:flex;  
+    flex: 1;
+    padding: 10px;
+}
+
+label {
+    margin: 5px;
+}
+
+.distanceInput {
+    flex: 0.5;
 }

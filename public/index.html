@@ -93,14 +93,26 @@
         <tbody>
         </tbody>
     </table>
-    <div class="routeTableForm">
-        <form id="insertRouteTable">
-            Origin: <input type="text" id="insertOrigin" placeholder="Enter Origin Address" required maxlength="30"> <br><br>
-            Destination: <input type="text" id="insertDestination" placeholder="Enter Destination Address" require maxlength="30"> <br><br>
-            Distance: <input type="number" id="insertDistance" placeholder="Enter Distance (in Km)"> <br><br>
-            <button type="submit"> Add Routes </button> <br>
-        </form>
-    </div>
+    <form id="insertRouteTable">
+        <div class="routeTableDiv">
+            <div class="form-group">
+                <label for="insertOrigin">Origin: </label>
+                <input type="text" id="insertOrigin" class="routesInput" placeholder="Enter Origin Address" required maxlength="30">
+            </div>
+    
+            <div class="form-group">
+                <label for="insertDestination">Destination: </label>
+                <input type="text" id="insertDestination" class="routesInput" placeholder="Enter Destination Address" required maxlength="30">
+            </div>
+    
+            <div class="form-group distanceInput">
+                <label for="insertDistance">Distance: </label>
+                <input type="number" id="insertDistance" class="routesInput" placeholder="Enter Distance (in Km)">
+            </div>
+        </div>
+        <button type="submit">Add Routes</button>
+    </form>
+    
     
     <div id="insertResultMsgRoute"></div>
 
