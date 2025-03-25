@@ -160,10 +160,10 @@ async function initiateRouteTable() {
 
         const routeTableResult = await connection.execute(`
             CREATE TABLE ROUTETABLE (
+                routeId CHAR(8) PRIMARY KEY,
                 origin VARCHAR2(30),
                 destination VARCHAR2(30),
-                distance NUMBER,
-                PRIMARY KEY (origin, destination)
+                distance NUMBER
             )
         `);
         return true;
@@ -172,11 +172,11 @@ async function initiateRouteTable() {
     });
 }
 
-async function insertRouteTable(origin, destination, distance) {
+async function insertRouteTable(routeId, origin, destination, distance) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO ROUTETABLE (origin, destination, distance) VALUES (:origin, :destination, :distance)`,
-            [origin, destination, distance],
+            `INSERT INTO ROUTETABLE (routeId, origin, destination, distance) VALUES (:routeId,:origin, :destination, :distance)`,
+            [routeId, origin, destination, distance],
             { autoCommit: true }
         );
 

@@ -48,7 +48,7 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2> Insert Values into DemoTable </h2>
+    <!-- <h2> Insert Values into DemoTable </h2>
     <form id="insertDemotable">
         ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
         Name: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
@@ -73,7 +73,7 @@
 
     <h2>Count the Tuples in DemoTable</h2>
     <button id="countDemotable"> count </button> <br><br>
-    <div id="countResultMsg"></div> <br>
+    <div id="countResultMsg"></div> <br> -->
 
     <br><hr><br>
 
@@ -160,6 +160,10 @@
     <h3>Input a route</h3>
     <form id="insertRouteTable">
         <div class="tableDiv">
+            <div class="form-group routeIdInput">
+                <label for="insertRouteId">Id: </label>
+                <input type="text" id="insertRouteId"  placeholder="Enter Id" required maxlength="30">
+            </div>
             <div class="form-group">
                 <label for="insertRouteOrigin">Origin: </label>
                 <input type="text" id="insertRouteOrigin"  placeholder="Enter Origin Address" required maxlength="30">

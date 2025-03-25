@@ -82,8 +82,8 @@ router.post("/initiate-routeTable", async (req, res) => {
 });
 
 router.post("/insert-routeTable", async (req, res) => {
-    const { origin, destination, distance } = req.body;
-    const insertResult = await appService.insertRouteTable(origin, destination, distance);
+    const { routeId, origin, destination, distance } = req.body;
+    const insertResult = await appService.insertRouteTable(routeId, origin, destination, distance);
     if (insertResult) {
         res.json({ success: true });
     } else {

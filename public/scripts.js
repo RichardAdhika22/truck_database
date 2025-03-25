@@ -221,6 +221,7 @@ async function resetRouteTable() {
 async function insertRouteTable(event) {
     event.preventDefault();
 
+    const idValue = document.getElementById('insertRouteId').value;
     const originValue = document.getElementById('insertRouteOrigin').value;
     const destinationValue = document.getElementById('insertRouteDestination').value;
     const distanceValue = document.getElementById('insertRouteDistance').value;
@@ -231,6 +232,7 @@ async function insertRouteTable(event) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            routeId: idValue,
             origin: originValue,
             destination: destinationValue,
             distance: distanceValue
@@ -365,8 +367,8 @@ window.onload = function() {
     checkDbConnection();
     fetchTableData();
     document.getElementById("resetDemotable").addEventListener("click", resetTable);
-    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    // document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+    // document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
     // document.getElementById("countDemotable").addEventListener("click", countDemotable);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
     document.getElementById("insertOrderTable").addEventListener("submit", insertOrderTable);
