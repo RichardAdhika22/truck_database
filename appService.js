@@ -192,7 +192,9 @@ async function insertOrderTable(orderId, customerId, weight, routeId, orderDate,
 
 async function fetchOrderTableFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM ORDERTABLE');
+        const result = await connection.execute(
+            `SELECT orderId, customerId, weight, routeId, TO_CHAR(orderDate, 'YYYY-MM-DD'), departureTime, arrivalTime FROM ORDERTABLE`
+        );
         return result.rows;
     }).catch(() => {
         return [];
@@ -201,11 +203,18 @@ async function fetchOrderTableFromDb() {
 
 async function updateOrderTable(orderId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
-        console.log(attribute);
         let result;
-        if (attribute === "customerId") {
+        console.log(attribute);
+
+        if (attribute === "orderDate") {
             result = await connection.execute(
-                `UPDATE ORDERTABLE SET customerId=:newValue where orderId=:orderId`,
+                `UPDATE ORDERTABLE SET ${attribute}=TO_DATE(:newValue, 'YYYY-MM-DD') where orderId=:orderId`,
+                [newValue, orderId],
+                { autoCommit: true }
+            );
+        } else {
+            result = await connection.execute(
+                `UPDATE ORDERTABLE SET ${attribute}=:newValue where orderId=:orderId`,
                 [newValue, orderId],
                 { autoCommit: true }
             );

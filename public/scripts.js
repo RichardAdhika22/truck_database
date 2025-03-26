@@ -283,7 +283,7 @@ function handleOptionChange() {
     } else if (selectedValue === "routeId") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Route ID: </label>
                 <input type="text" id="newOrderValue" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
-    } else if (selectedValue === "date") {
+    } else if (selectedValue === "orderDate") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Date :</label>
                 <input type="date" id="newOrderValue">`
     } else if (selectedValue === "departureTime") {
