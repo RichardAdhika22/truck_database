@@ -91,6 +91,16 @@ router.post("/insert-routeTable", async (req, res) => {
     }
 });
 
+router.delete("/delete-routeTable", async (req, res) => {
+    const { routeId} = req.body;
+    const insertResult = await appService.deleteRouteTable(routeId);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 router.get('/routeTable', async (req, res) => {
     const tableContent = await appService.fetchRouteTableFromDb();
     res.json({data: tableContent});

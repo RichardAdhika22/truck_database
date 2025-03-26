@@ -263,6 +263,31 @@ async function fetchAndDisplayRouteTable() {
     populateTable(tableBody, content);
 }
 
+async function deleteRouteTable(event) {
+    event.preventDefault();
+    const routeIdValue = document.getElementById('insertDeleteRouteId').value;
+    // console.log(oldCustomerIdValue);
+    const response = await fetch('/delete-routeTable', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            routeId: routeIdValue
+        })
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('deleteRouteIdResultMsg');
+
+    if (responseData.success) {
+        messageElement.textContent = "The specified route successfully deleted";
+        fetchTableData();
+    } else {
+        messageElement.textContent = "The specified route does not exist!";
+    }
+}
+
 // =======================
 // ORDER TABLE
 // =======================
@@ -373,6 +398,7 @@ window.onload = function() {
     // document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
     // document.getElementById("countDemotable").addEventListener("click", countDemotable);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
+    document.getElementById("deleteRouteTable").addEventListener("submit", deleteRouteTable);
     document.getElementById("insertOrderTable").addEventListener("submit", insertOrderTable);
     document.getElementById("updateCustomerIdOrderTable").addEventListener("submit", updateCustomerIdOrderTable);
 };

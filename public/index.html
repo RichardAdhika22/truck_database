@@ -84,6 +84,7 @@
                 <th>Order ID</th>
                 <th>Customer ID</th>
                 <th>Weight</th>
+                <th>Route ID</th>
                 <th>Date</th>
                 <th>Departure Time</th>
                 <th>Arrival Time</th>
@@ -153,7 +154,7 @@
         <thead>
             <tr>
                 <!--Table head, need to be adjusted accordingly to align with your own.-->
-                <th>Route Id</th>
+                <th>Route ID</th>
                 <th>Origin</th>
                 <th>Destination</th>
                 <th>Distance</th>
@@ -187,6 +188,18 @@
         <button type="submit">Add Route</button>
     </form>
     <div id="insertResultMsgRoute"></div>
+
+    <h3>Delete Route</h3>
+    <form id="deleteRouteTable">
+        <div class="tableDiv">
+            <div class="form-group">
+                <label for="insertDeleteRouteId">Route ID :</label>
+                <input type="text" id="insertDeleteRouteId" placeholder="Enter Route Id to be removed" required  maxlength="10">
+            </div>
+            <button type="submit"> Delete </button> <br>
+        </div>
+    </form>
+    <div id="deleteRouteIdResultMsg"></div>
 
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->

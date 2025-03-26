@@ -185,7 +185,22 @@ async function insertRouteTable(routeId, origin, destination, distance) {
     }).catch(() => {
         return false;
     });
-}   
+}  
+
+async function deleteRouteTable(routeId) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `DELETE FROM ROUTETABLE 
+            WHERE routeId=:routeId`,
+            [routeId],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}  
 
 async function fetchRouteTableFromDb() {
     return await withOracleDB(async (connection) => {
@@ -280,4 +295,5 @@ module.exports = {
     insertOrderTable,
     fetchOrderTableFromDb,
     updateCustomerIdOrderTable,
+    deleteRouteTable,
 };
