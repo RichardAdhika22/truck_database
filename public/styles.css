@@ -52,6 +52,7 @@ button {
     cursor: pointer;
     transition: background-color 0.3s;
     outline: none;
+    max-height: 50px;
 }
 
 button:hover {
@@ -63,7 +64,7 @@ button:active {
 }
 
 /* INPUT STYLES */
-input, textarea {
+input, textarea, select {
     width: 100%;
     padding: 10px 15px;
     font-size: 16px;
@@ -79,6 +80,10 @@ input::placeholder, textarea::placeholder {
 }
 
 /* OTHER STYLES */
+.hidden {
+    display: none;
+}
+
 .loading-gif {
     height: 1em;
     vertical-align: middle;
@@ -120,4 +125,15 @@ label {
 .submitAndResult {
     display: flex;
     gap: 8px;
+}
+
+.deleteInput {
+    max-width: 500px;
+}
+
+.pageHeading {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    max-height: 100px;
 }

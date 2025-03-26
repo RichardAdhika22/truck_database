@@ -75,6 +75,15 @@ function populateTable(tableBody, tableContent) {
     });
 }
 
+function hideShow(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section.classList.contains('hidden')) {
+        section.classList.remove('hidden');
+    } else {
+        section.classList.add('hidden');
+    }
+}
+
 // =======================
 // ROUTE TABLE
 // =======================
@@ -265,7 +274,7 @@ async function updateOrderTable(event) {
     }
 }
 
-function handleOptionChange() {
+function handleUpdateOptions() {
     const selectElement = document.getElementById("updateOptions");
     const selectedValue = selectElement.value;
     const inputContainer = document.getElementById("updateInputcontainer");
@@ -302,6 +311,10 @@ function handleOptionChange() {
 window.onload = function() {
     checkDbConnection();
     fetchTableData();
+    document.getElementById('updateOptions').addEventListener('change', handleUpdateOptions);
+    document.getElementById('hideShowRoute').addEventListener('click', function() {hideShow('routePageContent');});
+    document.getElementById('hideShowOrder').addEventListener('click', function() {hideShow('orderPageContent');});
+
     document.getElementById("resetDemotable").addEventListener("click", resetTable);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
     document.getElementById("deleteRouteTable").addEventListener("submit", deleteRouteTable);

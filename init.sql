@@ -1,0 +1,21 @@
+DROP TABLE ORDERTABLE
+DROP TABLE ROUTETABLE
+
+CREATE TABLE ROUTETABLE (
+    routeId CHAR(6) PRIMARY KEY,
+    origin VARCHAR2(20) NOT NULL,
+    destination VARCHAR2(20) NOT NULL,
+    distance NUMBER
+)
+
+CREATE TABLE ORDERTABLE (
+    orderId CHAR(6) PRIMARY KEY,
+    customerId CHAR(6) NOT NULL,
+    weight NUMBER,
+    routeId CHAR(6) NOT NULL,
+    orderDate DATE,
+    departureTime CHAR(8),
+    arrivalTime CHAR(8),
+    FOREIGN KEY (routeId) REFERENCES ROUTETABLE
+        ON DELETE CASCADE
+)
