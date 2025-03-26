@@ -116,3 +116,8 @@ label {
 .routeIdInput {
     flex: 0.7;
 }
+
+.submitAndResult {
+    display: flex;
+    gap: 8px;
+}

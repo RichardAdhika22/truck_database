@@ -235,30 +235,63 @@ async function fetchAndDisplayOrderTable() {
     populateTable(tableBody, content);
 }
 
-async function updateCustomerIdOrderTable(event) {
+async function updateOrderTable(event) {
     event.preventDefault();
-    const oldCustomerIdValue = document.getElementById('insertOldCustomerId').value;
-    const newCustomerIdValue = document.getElementById('insertNewCustomerId').value;
-    // console.log(oldCustomerIdValue);
-    const response = await fetch('/update-customerId-orderTable', {
+    const orderIdValue = document.getElementById('insertUpdateOrderId').value;
+    const attributeValue = document.getElementById('updateOptions').value;
+    const newValue = document.getElementById('newOrderValue').value;
+    // console.log(newValue);
+
+    const response = await fetch('/update-orderTable', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            oldCustomerId: oldCustomerIdValue,
-            newCustomerId: newCustomerIdValue
+            orderId: orderIdValue,
+            attribute: attributeValue,
+            newValue: newValue
         })
     });
 
     const responseData = await response.json();
-    const messageElement = document.getElementById('updateCustomerIdResultMsg');
+    const messageElement = document.getElementById('updateOrderResultMsg');
 
     if (responseData.success) {
-        messageElement.textContent = "Customer ID updated successfully!";
+        messageElement.textContent = "The specified attribute updated successfully!";
         fetchTableData();
     } else {
-        messageElement.textContent = "Error updating Customer ID!";
+        messageElement.textContent = "Error updating the specified attribute!";
+    }
+}
+
+function handleOptionChange() {
+    const selectElement = document.getElementById("updateOptions");
+    const selectedValue = selectElement.value;
+    const inputContainer = document.getElementById("updateInputcontainer");
+
+    // Clear the input container
+    inputContainer.innerHTML = '';
+
+    // Add an input box based on the selected option
+    if (selectedValue === "customerId") {
+        inputContainer.innerHTML = `<label for="newOrderValue">New Customer ID: </label>
+                <input type="text" id="newOrderValue" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
+    } else if (selectedValue === "weight") {
+        inputContainer.innerHTML = `<label for="newOrderValue">New Weight: </label>
+                <input type="number" id="newOrderValue" placeholder="Enter Item Weight (in Kg)">`;
+    } else if (selectedValue === "routeId") {
+        inputContainer.innerHTML = `<label for="newOrderValue">New Route ID: </label>
+                <input type="text" id="newOrderValue" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
+    } else if (selectedValue === "date") {
+        inputContainer.innerHTML = `<label for="newOrderValue">New Date :</label>
+                <input type="date" id="newOrderValue">`
+    } else if (selectedValue === "departureTime") {
+        inputContainer.innerHTML = `<label for="newOrderValue">New Departure Time: </label>
+                <input type="time" id="newOrderValue">`
+    } else if (selectedValue === "arrivalTime") {
+        inputContainer.innerHTML = `<label for="newOrderValue">New Arrival Time: </label>
+                <input type="time" id="newOrderValue">`
     }
 }
 
@@ -273,5 +306,5 @@ window.onload = function() {
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
     document.getElementById("deleteRouteTable").addEventListener("submit", deleteRouteTable);
     document.getElementById("insertOrderTable").addEventListener("submit", insertOrderTable);
-    document.getElementById("updateCustomerIdOrderTable").addEventListener("submit", updateCustomerIdOrderTable);
+    document.getElementById("updateOrderTable").addEventListener("submit", updateOrderTable);
 };

@@ -94,9 +94,9 @@ async function initiateRouteTable() {
 
         const routeTableResult = await connection.execute(`
             CREATE TABLE ROUTETABLE (
-                routeId VARCHAR(8) PRIMARY KEY,
-                origin VARCHAR2(30),
-                destination VARCHAR2(30),
+                routeId CHAR(6) PRIMARY KEY,
+                origin VARCHAR2(20) NOT NULL,
+                destination VARCHAR2(20) NOT NULL,
                 distance NUMBER
             )
         `);
@@ -158,10 +158,10 @@ async function initiateOrderTable() {
 
         const orderTableResult = await connection.execute(`
             CREATE TABLE ORDERTABLE (
-                orderId CHAR(8) PRIMARY KEY,
-                customerId CHAR(8) NOT NULL,
+                orderId CHAR(6) PRIMARY KEY,
+                customerId CHAR(6) NOT NULL,
                 weight NUMBER,
-                routeId VARCHAR(8) NOT NULL,
+                routeId CHAR(6) NOT NULL,
                 orderDate DATE,
                 departureTime CHAR(8),
                 arrivalTime CHAR(8),
@@ -199,14 +199,17 @@ async function fetchOrderTableFromDb() {
     });
 }
 
-async function updateCustomerIdOrderTable(oldCustomerId, newCustomerId) {
+async function updateOrderTable(orderId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `UPDATE ORDERTABLE SET customerId=:newCustomerId where customerId=:oldCustomerId`,
-            [newCustomerId, oldCustomerId],
-            { autoCommit: true }
-        );
-        
+        console.log(attribute);
+        let result;
+        if (attribute === "customerId") {
+            result = await connection.execute(
+                `UPDATE ORDERTABLE SET customerId=:newValue where orderId=:orderId`,
+                [newValue, orderId],
+                { autoCommit: true }
+            );
+        }
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch((err) => {
         console.log(err);
@@ -222,6 +225,6 @@ module.exports = {
     initiateOrderTable,
     insertOrderTable,
     fetchOrderTableFromDb,
-    updateCustomerIdOrderTable,
+    updateOrderTable,
     deleteRouteTable,
 };

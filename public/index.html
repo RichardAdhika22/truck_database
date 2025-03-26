@@ -25,7 +25,7 @@
     <br><hr><br> <!-- ========================================================================= -->
 
     <h2>Reset Demotable</h2>
-    <p>If you wish to reset ALL the tables, press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+    <p>If you wish to reset ALL the tables, press on the reset button. If this is the first time you're running this page, you MUST use reset.</p>
     <button id="resetDemotable"> reset </button> <br>
     <!-- A placeholder to display messages related to the reset operation. -->
     <div id="resetResultMsg"></div>
@@ -53,19 +53,19 @@
         <div class="tableDiv">
             <div class="form-group">
                 <label for="insertOrderId">ID :</label>
-                <input type="text" id="insertOrderId" placeholder="Enter Order ID" required maxlength="10">
+                <input type="text" id="insertOrderId" placeholder="6-characters ID" required minlength="6" maxlength="6">
             </div>
             <div class="form-group">
                 <label for="insertOrderCustomerId">Customer ID: </label>
-                <input type="text" id="insertOrderCustomerId" placeholder="Enter Customer ID" maxlength="10">
+                <input type="text" id="insertOrderCustomerId" placeholder="6-characters ID" required minlength="6" maxlength="6">
             </div>
             <div class="form-group">
                 <label for="insertOrderWeight">Weight: </label>
-                <input type="number" id="insertOrderWeight" placeholder="Enter Item Weight (in Kg)" maxlength="10">
+                <input type="number" id="insertOrderWeight" placeholder="Enter Item Weight (in Kg)">
             </div>
             <div class="form-group">
                 <label for="insertOrderRouteId">Route ID: </label>
-                <input type="text" id="insertOrderRouteId" placeholder="Enter Route ID" maxlength="10">
+                <input type="text" id="insertOrderRouteId" placeholder="6-characters ID" required minlength="6" maxlength="6">
             </div>
         </div>
         <div class="tableDiv">
@@ -82,25 +82,60 @@
                 <input type="time" id="insertOrderArrivalTime">
             </div>
         </div>
-        <button type="submit">Add Order</button>
+        <div class="submitAndResult">
+            <button type="submit">Add Order</button>
+            <div id="insertResultMsgOrder"></div>
+        </div>
     </form>
-    <div id="insertResultMsgOrder"></div>
 
-    <h3>Update Customer ID</h3>
+    
+
+    <h3>Update Values</h3>
+    <form id="updateOrderTable">
+        <div class="tableDiv">
+            <div class="form-group">
+                <label for="insertUpdateOrderId">Order ID to be updated:</label>
+                <input type="text" id="insertUpdateOrderId" placeholder="6-characters ID" required minlength="6"  maxlength="6">
+            </div>
+
+            <div class="form-group">
+                <label for="updateOptions">Choose attribute:</label>
+                <select id="updateOptions" name="updateOptions" onchange="handleOptionChange()">
+                    <option value="" disabled selected>Select an attribute</option>
+                    <option value="customerId">Customer ID</option>
+                    <option value="weight">Weight</option>
+                    <option value="routeId">Route ID</option>
+                    <option value="date">Date</option>
+                    <option value="departureTime">Departure Time</option>
+                    <option value="arrivalTime">Arrival Time</option>
+                </select>
+            </div>
+            
+            <div id="updateInputcontainer" class="updateInputcontainer form-group"></div>
+        </div>
+        <div class="submitAndResult">
+            <button type="submit"> Update </button> <br>
+            <div id="updateOrderResultMsg"></div>
+        </div>
+    </form>
+    
+    <!-- <h3>Update Customer ID</h3>
     <form id="updateCustomerIdOrderTable">
         <div class="tableDiv">
             <div class="form-group">
                 <label for="insertOldCustomerId">Old Customer ID :</label>
-                <input type="text" id="insertOldCustomerId" placeholder="Enter Old Customer ID" required  maxlength="10">
+                <input type="text" id="insertOldCustomerId" placeholder="6-characters ID" required minlength="6"  maxlength="6">
             </div>
             <div class="form-group">
                 <label for="insertNewCustomerId">New Customer ID: </label>
-                <input type="text" id="insertNewCustomerId" placeholder="Enter New Customer ID"required maxlength="10">
+                <input type="text" id="insertNewCustomerId" placeholder="6-characters ID"required minlength="6" maxlength="6">
             </div>
-            <button type="submit"> Update </button> <br>
+            <div class="submitAndResult">
+                <button type="submit"> Update </button> <br>
+                <div id="updateCustomerIdResultMsg"></div>
+            </div>
         </div>
-    </form>
-    <div id="updateCustomerIdResultMsg"></div>
+    </form> -->
 
     <br><hr><br>
 
@@ -123,38 +158,42 @@
         <div class="tableDiv">
             <div class="form-group routeIdInput">
                 <label for="insertRouteId">Id: </label>
-                <input type="text" id="insertRouteId"  placeholder="Enter Id" required maxlength="30">
+                <input type="text" id="insertRouteId"  placeholder="6-characters ID" required minlength="6" maxlength="6">
             </div>
             <div class="form-group">
                 <label for="insertRouteOrigin">Origin: </label>
-                <input type="text" id="insertRouteOrigin"  placeholder="Enter Origin Address" required maxlength="30">
+                <input type="text" id="insertRouteOrigin"  placeholder="Origin Coordinate" required maxlength="20">
             </div>
     
             <div class="form-group">
                 <label for="insertRouteDestination">Destination: </label>
-                <input type="text" id="insertRouteDestination"  placeholder="Enter Destination Address" required maxlength="30">
+                <input type="text" id="insertRouteDestination"  placeholder="Destination Coordinate" required maxlength="20">
             </div>
     
             <div class="form-group distanceInput">
                 <label for="insertRouteDistance">Distance: </label>
-                <input type="number" id="insertRouteDistance"  placeholder="(in Km)">
+                <input type="number" id="insertRouteDistance"  placeholder="in Km">
             </div>
         </div>
-        <button type="submit">Add Route</button>
+        <div class="submitAndResult">
+            <button type="submit">Add Route</button>
+            <div id="insertResultMsgRoute"></div>
+        </div>
     </form>
-    <div id="insertResultMsgRoute"></div>
 
     <h3>Delete Route</h3>
     <form id="deleteRouteTable">
         <div class="tableDiv">
             <div class="form-group">
                 <label for="insertDeleteRouteId">Route ID :</label>
-                <input type="text" id="insertDeleteRouteId" placeholder="Enter Route Id to be removed" required  maxlength="10">
+                <input type="text" id="insertDeleteRouteId" placeholder="Enter Route Id to be removed" required minlength="6" maxlength="6">
             </div>
-            <button type="submit"> Delete </button> <br>
+            <div class="submitAndResult">
+                <button type="submit"> Delete </button> <br>
+                <div id="deleteRouteIdResultMsg"></div>
+            </div>
         </div>
     </form>
-    <div id="deleteRouteIdResultMsg"></div>
 
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->

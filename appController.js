@@ -85,9 +85,9 @@ router.get('/orderTable', async (req, res) => {
     res.json({data: tableContent});
 });
 
-router.post("/update-customerId-orderTable", async (req, res) => {
-    const { oldCustomerId, newCustomerId } = req.body;
-    const updateResult = await appService.updateCustomerIdOrderTable(oldCustomerId, newCustomerId);
+router.post("/update-orderTable", async (req, res) => {
+    const { orderId, attribute, newValue } = req.body;
+    const updateResult = await appService.updateOrderTable(orderId, attribute, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
