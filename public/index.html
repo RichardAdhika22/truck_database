@@ -23,7 +23,9 @@
     <!-- <br><hr><br> ========================================================================= -->
 
     <h2>Reset Demotable</h2>
-    <p>If you wish to reset ALL the tables, press on the reset button. If this is the first time you're running this page, you MUST use reset.</p>
+    <p>If you wish to reset ALL the tables, press on the reset button. If this is the first time you're running this page, you MUST use reset.
+        This will also initialize some default values for the tables.
+    </p>
     <button id="resetDemotable"> reset </button> <br>
     <!-- A placeholder to display messages related to the reset operation. -->
     <div id="resetResultMsg"></div>
@@ -92,7 +94,7 @@
     
         
     
-        <h3>Update Values</h3>
+        <h3>Update an attribute</h3>
         <form id="updateOrderTable">
             <div class="tableDiv">
                 <div class="form-group">
@@ -151,12 +153,12 @@
                 </div>
                 <div class="form-group">
                     <label for="insertRouteOrigin">Origin: </label>
-                    <input type="text" id="insertRouteOrigin"  placeholder="Origin Coordinate" required maxlength="20">
+                    <input type="text" id="insertRouteOrigin"  placeholder="Origin Coordinate" required maxlength="30">
                 </div>
         
                 <div class="form-group">
                     <label for="insertRouteDestination">Destination: </label>
-                    <input type="text" id="insertRouteDestination"  placeholder="Destination Coordinate" required maxlength="20">
+                    <input type="text" id="insertRouteDestination"  placeholder="Destination Coordinate" required maxlength="30">
                 </div>
         
                 <div class="form-group distanceInput">
@@ -170,7 +172,7 @@
             </div>
         </form>
     
-        <h3>Delete Route</h3>
+        <h3>Delete a route</h3>
         <form id="deleteRouteTable">
             <div class="tableDiv deleteInput">
                 <div class="form-group">
