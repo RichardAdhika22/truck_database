@@ -110,8 +110,8 @@ router.post("/initiate-orderTable", async (req, res) => {
 });
 
 router.post("/insert-orderTable", async (req, res) => {
-    const { orderId, customerId, weight, orderDate, departureTime, arrivalTime } = req.body;
-    const insertResult = await appService.insertOrderTable(orderId, customerId, weight, orderDate, departureTime, arrivalTime);
+    const { orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime } = req.body;
+    const insertResult = await appService.insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime);
     if (insertResult) {
         res.json({ success: true });
     } else {

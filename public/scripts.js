@@ -288,6 +288,7 @@ async function insertOrderTable(event) {
     const orderIdValue = document.getElementById('insertOrderId').value;
     const customerIdValue = document.getElementById('insertOrderCustomerId').value;
     const weightValue = document.getElementById('insertOrderWeight').value;
+    const routeIdValue = document.getElementById('insertOrderRouteId').value;
     const dateValue = document.getElementById('insertOrderDate').value;
     const departureTimeValue = document.getElementById('insertOrderDepartureTime').value;
     const arrivalTimeValue = document.getElementById('insertOrderArrivalTime').value;
@@ -302,6 +303,7 @@ async function insertOrderTable(event) {
             orderId: orderIdValue,
             customerId: customerIdValue,
             weight: weightValue,
+            routeId: routeIdValue,
             orderDate: dateValue,
             departureTime: departureTimeValue,
             arrivalTime: arrivalTimeValue

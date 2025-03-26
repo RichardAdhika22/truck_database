@@ -153,6 +153,7 @@ async function countDemotable() {
 async function initiateRouteTable() {
     return await withOracleDB(async (connection) => {
         try {
+            await connection.execute(`DROP TABLE ORDERTABLE`);
             await connection.execute(`DROP TABLE ROUTETABLE`);
         } catch(err) {
             console.log('Table might not exist, proceeding to create...');
@@ -160,7 +161,7 @@ async function initiateRouteTable() {
 
         const routeTableResult = await connection.execute(`
             CREATE TABLE ROUTETABLE (
-                routeId CHAR(8) PRIMARY KEY,
+                routeId VARCHAR(8) PRIMARY KEY,
                 origin VARCHAR2(30),
                 destination VARCHAR2(30),
                 distance NUMBER
@@ -212,9 +213,12 @@ async function initiateOrderTable() {
                 orderId CHAR(8) PRIMARY KEY,
                 customerId CHAR(8) NOT NULL,
                 weight NUMBER,
+                routeId VARCHAR(8) NOT NULL,
                 orderDate DATE,
                 departureTime CHAR(8),
-                arrivalTime CHAR(8)
+                arrivalTime CHAR(8),
+                FOREIGN KEY (routeId) REFERENCES ROUTETABLE
+                    ON DELETE CASCADE
             )
         `);
         return true;
@@ -223,12 +227,12 @@ async function initiateOrderTable() {
     });
 }
 
-async function insertOrderTable(orderId, customerId, weight, orderDate, departureTime, arrivalTime) {
+async function insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO ORDERTABLE (orderId, customerId, weight, orderDate, departureTime, arrivaltime) 
-            VALUES (:orderId, :customerId, :weight, TO_DATE(:orderDate, 'YYYY-MM-DD'), :departureTime, :arrivalTime)`,
-            [orderId, customerId, weight, orderDate, departureTime, arrivalTime],
+            `INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime) 
+            VALUES (:orderId, :customerId, :weight, :routeId, TO_DATE(:orderDate, 'YYYY-MM-DD'), :departureTime, :arrivalTime)`,
+            [orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime],
             { autoCommit: true }
         );
 
