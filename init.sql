@@ -30,10 +30,10 @@ INSERT INTO ROUTETABLE (routeId, origin, destination, distance)
     VALUES ('r00003', '43.69039231, -79.28855125', '43.65886249, -79.48819193', 22)
 
 INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime)
-    VALUES ('o00001', 'c00001', 150, 'r00002', TO_DATE('2025-04-22', 'YYYY-MM-DD'), '06:00', '02:22')
+    VALUES ('o00001', 'c00001', 100, 'r00002', TO_DATE('2025-04-22', 'YYYY-MM-DD'), '06:00', '02:22')
 
 INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime)
     VALUES ('o00002', 'c00002', 150, 'r00001', TO_DATE('2025-03-29', 'YYYY-MM-DD'), '16:00', NULL)
 
 INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime)
-    VALUES ('o00003', 'c00001', 150, 'r00001', TO_DATE('2025-04-01', 'YYYY-MM-DD'), '10:00', '22:00')
+    VALUES ('o00003', 'c00001', 300, 'r00001', TO_DATE('2025-04-01', 'YYYY-MM-DD'), '10:00', '22:00')

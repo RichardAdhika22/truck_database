@@ -15,10 +15,10 @@
     <!-- Display the current status of the database connection. 
          !!HERE TO HELP U DEBUGGING, NOT REQUIRED IN YOUR OWN PROJECT!!
          -->
-    <!-- <h1>Database Connection Status: 
+    <h1>Database Connection Status: 
         <span id="dbStatus"> </span>
         <img id="loadingGif" class="loading-gif" src="loading_100px.gif" alt="Loading...">
-    </h1> -->
+    </h1>
 
     <!-- <br><hr><br> ========================================================================= -->
 
@@ -173,22 +173,45 @@
         </form>
     
         <h3>Delete a route</h3>
-        <form id="deleteRouteTable">
+        <form id="deleteRouteTable" class="submitAndResult">
             <div class="tableDiv deleteInput">
                 <div class="form-group">
                     <label for="insertDeleteRouteId">Route ID :</label>
                     <input type="text" id="insertDeleteRouteId" placeholder="Enter Route Id to be removed" required minlength="6" maxlength="6">
                 </div>
-                <div class="submitAndResult">
-                    <button type="submit"> Delete </button> <br>
-                    <div id="deleteRouteIdResultMsg"></div>
-                </div>
+                <button type="submit"> Delete </button> <br>
             </div>
+            <div id="deleteRouteIdResultMsg"></div>
         </form>
+    </div>
+
+    <br><hr><br>
+
+    <div class="pageHeading">
+        <h2 class="pageTitle">Locations (includes buildings and garages)</h2>
+        <button id="hideShowLocation">Hide/Show</button>
+    </div>
+    <div id="locationPageContent" class="hidden">
+        <table id="locationTable" border="1">
+            <thead>
+                <tr>
+                    <!--Table head, need to be adjusted accordingly to align with your own.-->
+                    <th>Coordinate</th>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Capacity</th>
+                    <th>Trucks Parked</th>
+                    <th>Close Time</th>
+                    <th>Open Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>    
     </div>
 
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
-    <script src="scripts.js"></script>
+    <script type="module" src="scripts.js"></script>
 </body>
 </html>
