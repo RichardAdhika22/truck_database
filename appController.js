@@ -1,8 +1,5 @@
 const express = require('express');
 const appService = require('./appService');
-const routeService = require('./appService-route');
-const orderService = require('./appService-order');
-const locationService = require('./appService-location');
 
 const router = express.Router();
 
@@ -18,12 +15,9 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
-// =======================
-// ROUTE TABLE
-// =======================
+router.post("/initiate-tables", async (req, res) => {
+    const initiateResult = await appService.executeSqlFile();
 
-router.post("/initiate-routeTable", async (req, res) => {
-    const initiateResult = await routeService.initiateRouteTable();
     if (initiateResult) {
         res.json({ success: true });
     } else {
@@ -31,9 +25,13 @@ router.post("/initiate-routeTable", async (req, res) => {
     }
 });
 
+// =======================
+// ROUTE TABLE
+// =======================
+
 router.post("/insert-routeTable", async (req, res) => {
     const { routeId, origin, destination, distance } = req.body;
-    const insertResult = await routeService.insertRouteTable(routeId, origin, destination, distance);
+    const insertResult = await appService.insertRouteTable(routeId, origin, destination, distance);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -43,7 +41,7 @@ router.post("/insert-routeTable", async (req, res) => {
 
 router.delete("/delete-routeTable", async (req, res) => {
     const { routeId} = req.body;
-    const insertResult = await routeService.deleteRouteTable(routeId);
+    const insertResult = await appService.deleteRouteTable(routeId);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -52,7 +50,7 @@ router.delete("/delete-routeTable", async (req, res) => {
 });
 
 router.get('/routeTable', async (req, res) => {
-    const tableContent = await routeService.fetchRouteTableFromDb();
+    const tableContent = await appService.fetchRouteTableFromDb();
     res.json({data: tableContent});
 });
 
@@ -60,18 +58,9 @@ router.get('/routeTable', async (req, res) => {
 // ORDER TABLE
 // =======================
 
-router.post("/initiate-orderTable", async (req, res) => {
-    const initiateResult = await orderService.initiateOrderTable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
 router.post("/insert-orderTable", async (req, res) => {
     const { orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime } = req.body;
-    const insertResult = await orderService.insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime);
+    const insertResult = await appService.insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -80,13 +69,13 @@ router.post("/insert-orderTable", async (req, res) => {
 });
 
 router.get('/orderTable', async (req, res) => {
-    const tableContent = await orderService.fetchOrderTableFromDb();
+    const tableContent = await appService.fetchOrderTableFromDb();
     res.json({data: tableContent});
 });
 
 router.post("/update-orderTable", async (req, res) => {
     const { orderId, attribute, newValue } = req.body;
-    const updateResult = await orderService.updateOrderTable(orderId, attribute, newValue);
+    const updateResult = await appService.updateOrderTable(orderId, attribute, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
@@ -98,17 +87,8 @@ router.post("/update-orderTable", async (req, res) => {
 // LOCATION TABLE
 // =======================
 
-router.post("/initiate-locationTable", async (req, res) => {
-    const initiateResult = await locationService.initiateLocationTable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
 router.get('/locationTable', async (req, res) => {
-    const tableContent = await locationService.fetchLocationTableFromDb();
+    const tableContent = await appService.fetchLocationTableFromDb();
     res.json({data: tableContent});
 });
 

@@ -1,5 +1,6 @@
 const oracledb = require('oracledb');
 const loadEnvFile = require('./utils/envUtil');
+const fs = require('fs').promises;
 
 const envVariables = loadEnvFile('./.env');
 
@@ -75,7 +76,144 @@ async function testOracleConnection() {
     });
 }
 
+async function executeSqlFile() {
+    const sqlContent = await fs.readFile('./initializeTables.sql', 'utf8');
+    // const sqlStatements = sqlContent.split('/').filter(stmt => stmt.trim().length > 0);
+
+    return await withOracleDB(async (connection) => {
+        // for (let statement of sqlStatements) {
+        //     await connection.execute(statement);
+        // }
+        await connection.execute(sqlContent);
+        await connection.commit();
+
+        return true;
+    }).catch(() => {
+        return false;
+    });
+}   
+
+// =======================
+// ROUTE TABLE
+// =======================
+
+async function insertRouteTable(routeId, origin, destination, distance) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO ROUTETABLE (routeId, origin, destination, distance) VALUES (:routeId,:origin, :destination, :distance)`,
+            [routeId, origin, destination, distance],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}  
+
+async function deleteRouteTable(routeId) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `DELETE FROM ROUTETABLE 
+            WHERE routeId=:routeId`,
+            [routeId],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}  
+
+async function fetchRouteTableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM ROUTETABLE');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+// =======================
+// ORDER TABLE
+// =======================
+
+async function insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime) 
+            VALUES (:orderId, :customerId, :weight, :routeId, TO_DATE(:orderDate, 'YYYY-MM-DD'), :departureTime, :arrivalTime)`,
+            [orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}   
+
+async function fetchOrderTableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT orderId, customerId, weight, routeId, TO_CHAR(orderDate, 'YYYY-MM-DD'), departureTime, arrivalTime FROM ORDERTABLE`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function updateOrderTable(orderId, attribute, newValue) {
+    return await withOracleDB(async (connection) => {
+        let result;
+        console.log(attribute);
+
+        if (attribute === "orderDate") {
+            result = await connection.execute(
+                `UPDATE ORDERTABLE SET ${attribute}=TO_DATE(:newValue, 'YYYY-MM-DD') where orderId=:orderId`,
+                [newValue, orderId],
+                { autoCommit: true }
+            );
+        } else {
+            result = await connection.execute(
+                `UPDATE ORDERTABLE SET ${attribute}=:newValue where orderId=:orderId`,
+                [newValue, orderId],
+                { autoCommit: true }
+            );
+        }
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch((err) => {
+        console.log(err);
+        return false;
+    });
+}
+
+// =======================
+// LOCATION TABLE
+// =======================
+
+async function fetchLocationTableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT * FROM LOCATIONTABLE`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+
 module.exports = {
-    withOracleDB,
+    executeSqlFile,
     testOracleConnection,
+    insertRouteTable,
+    fetchRouteTableFromDb,
+    insertOrderTable,
+    fetchOrderTableFromDb,
+    updateOrderTable,
+    deleteRouteTable,
+    fetchLocationTableFromDb
 };
