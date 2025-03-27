@@ -72,12 +72,16 @@ function fetchTableData() {
     fetchAndDisplayTable('locationTable');
 }
 
-async function resetTable() {
+async function resetTables() {
     const messageElement = document.getElementById('resetResultMsg');
     try {
-        await fetch("/initiate-tables", {
+        const response = await fetch("/initiate-tables", {
             method: 'POST'
-        }); 
+        });
+        const responseData = await response.json();
+        if (!responseData.success) {
+            throw new Error("Error initiating tables!");
+        }
         messageElement.textContent = "All tables initiated successfully!";
     } catch (err) {
         messageElement.textContent = err.message;
@@ -268,7 +272,7 @@ window.onload = function() {
     document.getElementById('hideShowOrder').addEventListener('click', function() {hideShow('orderPageContent');});
     document.getElementById('hideShowLocation').addEventListener('click', function() {hideShow('locationPageContent');});
 
-    document.getElementById("resetTables").addEventListener("click", resetTable);
+    document.getElementById("resetTables").addEventListener("click", resetTables);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
     document.getElementById("deleteRouteTable").addEventListener("submit", deleteRouteTable);
 
