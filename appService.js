@@ -190,6 +190,17 @@ async function updateOrderTable(orderId, attribute, newValue) {
     });
 }
 
+async function selectOrderTable(selectQuery) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT orderId, customerId, weight, routeId, TO_CHAR(orderDate, 'YYYY-MM-DD'), departureTime, arrivalTime FROM ORDERTABLE where ${selectQuery}`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 // =======================
 // LOCATION TABLE
 // =======================
@@ -215,5 +226,6 @@ module.exports = {
     fetchOrderTableFromDb,
     updateOrderTable,
     deleteRouteTable,
-    fetchLocationTableFromDb
+    fetchLocationTableFromDb,
+    selectOrderTable,
 };

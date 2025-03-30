@@ -92,8 +92,6 @@
             </div>
         </form>
     
-        
-    
         <h3>Update an attribute</h3>
         <form id="updateOrderTable">
             <div class="tableDiv">
@@ -120,6 +118,41 @@
             <div class="submitAndResult">
                 <button type="submit"> Update </button> <br>
                 <div id="updateOrderResultMsg"></div>
+            </div>
+        </form>
+
+        <h3>Select order(s)</h3>
+        <div>Note: All AND operations will be evaluated before any OR operations.</div>
+        <form id="selectOrderTable">
+            <div class="tableDiv">
+                <div class="form-group">
+                    <select id="selectOptions1" name="selectOptions1">
+                        <option value="" disabled selected>Select an attribute</option>
+                        <option value="customerId">Customer ID</option>
+                        <option value="weight">Weight</option>
+                        <option value="routeId">Route ID</option>
+                        <option value="orderDate">Date</option>
+                        <option value="departureTime">Departure Time</option>
+                        <option value="arrivalTime">Arrival Time</option>
+                    </select>
+                </div>
+
+                <select id="conditionOperation1" name="conditionOperation1" style="width: 50px;">
+                    <option value="=">=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                    <option value="!=">!=</option>
+                    <option value="<="><=</option>
+                    <option value=">=">>=</option>
+                </select>
+                
+                <div id="selectInputContainer1" class="form-group"></div>
+            </div>
+
+            <div id="submitUpdate" class="submitAndResult" style="margin-bottom: 10px;">
+                <button id="addConditionUpdate">Add Condition</button>
+                <button id="resetConditionUpdate" type="button">Reset</button>
+                <button type="submit"> Select </button> <br>
             </div>
         </form>
     </div>

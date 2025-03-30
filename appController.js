@@ -83,6 +83,22 @@ router.post("/update-orderTable", async (req, res) => {
     }
 });
 
+router.get('/select-orderTable', async (req, res) => {
+    const { selectQuery } = req.query;  
+    console.log(selectQuery);
+    if (!selectQuery) {
+        return res.status(400).json({ error: "selectQuery parameter is required" });
+    }
+
+    try {
+        const selectResult = await appService.selectOrderTable(selectQuery);
+        res.json({ data: selectResult });
+    } catch (error) {
+        res.status(500).json({ error: "Error executing the query", message: error.message });
+    }
+});
+
+
 // =======================
 // LOCATION TABLE
 // =======================

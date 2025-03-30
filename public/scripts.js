@@ -83,6 +83,7 @@ async function resetTables() {
             throw new Error("Error initiating tables!");
         }
         messageElement.textContent = "All tables initiated successfully!";
+        fetchTableData();
     } catch (err) {
         messageElement.textContent = err.message;
         alert(err.message);
@@ -261,6 +262,150 @@ function handleUpdateOptions() {
     }
 }
 
+let conditionCount = 1;
+function addConditionUpdate() {
+    event.preventDefault();
+    conditionCount++;
+    const newFormGroup = document.createElement('div');
+    newFormGroup.classList.add('tableDiv');
+
+    newFormGroup.innerHTML = 
+    `<select id="selectLogic${conditionCount}" name="selectLogic${conditionCount}" style="width: 100px;">
+        <option value="and">AND</option>
+        <option value="or">OR</option>
+    </select>
+    
+    <div class="form-group">
+        <select id="selectOptions${conditionCount}" name="selectOptions${conditionCount}">
+            <option value="" disabled selected>Select an attribute</option>
+            <option value="customerId">Customer ID</option>
+            <option value="weight">Weight</option>
+            <option value="routeId">Route ID</option>
+            <option value="orderDate">Date</option>
+            <option value="departureTime">Departure Time</option>
+            <option value="arrivalTime">Arrival Time</option>
+        </select>
+    </div>
+
+    <select id="conditionOperation${conditionCount}" name="conditionOperation${conditionCount}" style="width: 50px;">
+        <option value="=">=</option>
+        <option value="<"><</option>
+        <option value=">">></option>
+        <option value="!=">!=</option>
+        <option value="<="><=</option>
+        <option value=">=">>=</option>
+    </select>
+    
+    <div id="selectInputContainer${conditionCount}" class="form-group"></div>`;
+
+    let submitUpdate = document.getElementById('submitUpdate');
+    document.getElementById('selectOrderTable').insertBefore(newFormGroup, submitUpdate);
+
+    document.getElementById(`selectOptions${conditionCount}`).addEventListener('change', function() {handleSelectOptions(conditionCount);});
+}
+
+function handleSelectOptions(count) {
+    const selectElement = document.getElementById(`selectOptions${count}`);
+    const selectedValue = selectElement.value;
+    const inputContainer = document.getElementById(`selectInputContainer${count}`);
+
+    // Clear the input container
+    inputContainer.innerHTML = '';
+
+    // Add an input box based on the selected option
+    if (selectedValue === "customerId") {
+        inputContainer.innerHTML = `<label for="selectValue${count}">New Customer ID: </label>
+                <input type="text" id="selectValue${count}" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
+    } else if (selectedValue === "weight") {
+        inputContainer.innerHTML = `<label for="selectValue${count}">New Weight: </label>
+                <input type="number" id="selectValue${count}" placeholder="Enter Item Weight (in Kg)">`;
+    } else if (selectedValue === "routeId") {
+        inputContainer.innerHTML = `<label for="selectValue${count}">New Route ID: </label>
+                <input type="text" id="selectValue${count}" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
+    } else if (selectedValue === "orderDate") {
+        inputContainer.innerHTML = `<label for="selectValue${count}">New Date :</label>
+                <input type="date" id="selectValue${count}">`
+    } else if (selectedValue === "departureTime") {
+        inputContainer.innerHTML = `<label for="selectValue${count}">New Departure Time: </label>
+                <input type="time" id="selectValue${count}">`
+    } else if (selectedValue === "arrivalTime") {
+        inputContainer.innerHTML = `<label for="selectValue${count}">New Arrival Time: </label>
+                <input type="time" id="selectValue${count}">`
+    }
+}
+
+function resetConditions() {
+    const formContainer = document.getElementById('selectOrderTable');
+    
+    while (formContainer.children.length > 2) {
+        formContainer.removeChild(formContainer.children[formContainer.children.length - 2]);
+    }
+    conditionCount = 1;
+}
+
+async function selectOrderTable() {
+    event.preventDefault();
+    let selectQuery = "";
+    for (let i = 1; i <= conditionCount; i++) {
+        const selectOptions = document.getElementById(`selectOptions${i}`).value;
+        const conditionOperation = document.getElementById(`conditionOperation${i}`).value;
+        const selectValue = document.getElementById(`selectValue${i}`).value;
+
+        if (i === 1) {
+            selectQuery += `${selectOptions} ${conditionOperation} ${selectValue}`;
+        } else {
+            const selectLogic = document.getElementById(`selectLogic${i}`).value;
+            selectQuery += ` ${selectLogic} ${selectOptions} ${conditionOperation} ${selectValue}`;
+        }
+    }
+    // console.log(selectQuery);
+
+    const response = await fetch(`/select-orderTable?selectQuery=${encodeURIComponent(selectQuery)}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const responseData = await response.json();
+    // const messageElement = document.getElementById('selectOrderResultMsg');
+    const content = responseData.data;
+
+    console.log(content);
+    const selectOrderTable = document.getElementById('selectOrderTable');
+    if (content.length === 0) {
+        const noResultsMessage = document.createElement('div');
+        noResultsMessage.textContent = 'No results found.';
+        selectOrderTable.appendChild(noResultsMessage);
+    } else {
+        const tableResult = document.createElement('table');
+        tableResult.id = 'selectOrderTableResult';
+        tableResult.innerHTML = 
+        `<thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Weight</th>
+                <th>Route ID</th>
+                <th>Date</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>`;
+        selectOrderTable.appendChild(tableResult);
+
+        content.forEach(user => {
+            const row = tableResult.insertRow();
+            user.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    }
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -278,4 +423,8 @@ window.onload = function() {
 
     document.getElementById("insertOrderTable").addEventListener("submit", insertOrderTable);
     document.getElementById("updateOrderTable").addEventListener("submit", updateOrderTable);
+    document.getElementById("selectOptions1").addEventListener('change', function() {handleSelectOptions(1);});
+    document.getElementById("addConditionUpdate").addEventListener("click", addConditionUpdate);
+    document.getElementById("resetConditionUpdate").addEventListener("click", resetConditions);
+    document.getElementById("selectOrderTable").addEventListener("submit", selectOrderTable);
 };
