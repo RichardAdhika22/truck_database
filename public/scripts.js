@@ -162,6 +162,70 @@ async function deleteRouteTable(event) {
     }
 }
 
+async function joinRouteTable() {
+    event.preventDefault();
+    const distanceInput = document.getElementById('joinInputRouteTable').value;
+    const showResult = document.getElementById('joinResult');
+    showResult.innerHTML = "";
+
+    const response = await fetch(`/join-routeTable?selectQuery=${encodeURIComponent(distanceInput)}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const responseData = await response.json();
+    const content = responseData.data;
+
+    console.log(content);
+
+    if (content.length === 0) {
+        showResult.textContent="No data that matches the condition!";
+    } else {
+        const tableResult = document.createElement('table');
+        tableResult.id = 'selectOrderTableResult';
+        tableResult.innerHTML = 
+        `<thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Weight</th>
+                <th>Route ID</th>
+                <th>Date</th>
+                <th>Origin Address</th>
+                <th>Destination Address</th>
+                <th>Distance</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>`;
+        showResult.appendChild(tableResult);
+
+        content.forEach(user => {
+            const row = tableResult.insertRow();
+            user.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    }
+}
+
+function hideShowRoute(sectionId) {
+    const sectionList = ['insertRoutePage', 'deleteRoutePage', 'joinRoutePage'];
+    for (const sectionName of sectionList) {
+        const section = document.getElementById(sectionName);
+        if (!section.classList.contains('hidden')) {
+            section.classList.add('hidden');
+        }
+    }
+    const section = document.getElementById(sectionId);
+    if (section.classList.contains('hidden')) {
+        section.classList.remove('hidden');
+    } 
+}
+
 // =======================
 // ORDER TABLE
 // =======================
@@ -282,7 +346,7 @@ function addConditionUpdate() {
     </select>
     
     <div class="form-group">
-        <select id="selectOptions${conditionCount}" name="selectOptions${conditionCount}">
+        <select id="selectOptions${conditionCount}" name="selectOptions${conditionCount}" required>
             <option value="" disabled selected>Select an attribute</option>
             <option value="customerId">Customer ID</option>
             <option value="weight">Weight</option>
@@ -324,18 +388,18 @@ function handleSelectOptions(count) {
                 <input type="text" id="selectValue${count}" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
     } else if (selectedValue === "weight") {
         inputContainer.innerHTML = `<label for="selectValue${count}">New Weight: </label>
-                <input type="number" id="selectValue${count}" placeholder="Enter Item Weight (in Kg)">`;
+                <input type="number" id="selectValue${count}" placeholder="Enter Item Weight (in Kg)" required>`;
     } else if (selectedValue === "routeId") {
         inputContainer.innerHTML = `<label for="selectValue${count}">New Route ID: </label>
                 <input type="text" id="selectValue${count}" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
     } else if (selectedValue === "orderDate") {
-        inputContainer.innerHTML = `<label for="selectValue${count}">New Date :</label>
+        inputContainer.innerHTML = `<label for="selectValue${count}" required>New Date :</label>
                 <input type="date" id="selectValue${count}">`
     } else if (selectedValue === "departureTime") {
-        inputContainer.innerHTML = `<label for="selectValue${count}">New Departure Time: </label>
+        inputContainer.innerHTML = `<label for="selectValue${count}" required>New Departure Time: </label>
                 <input type="time" id="selectValue${count}">`
     } else if (selectedValue === "arrivalTime") {
-        inputContainer.innerHTML = `<label for="selectValue${count}">New Arrival Time: </label>
+        inputContainer.innerHTML = `<label for="selectValue${count}" required>New Arrival Time: </label>
                 <input type="time" id="selectValue${count}">`
     }
 }
@@ -351,10 +415,17 @@ function resetConditions() {
 
 async function selectOrderTable() {
     event.preventDefault();
+    const showResult = document.getElementById('updateResult');
+    showResult.innerHTML = "";
     let selectQuery = "";
     for (let i = 1; i <= conditionCount; i++) {
         const selectOptions = document.getElementById(`selectOptions${i}`).value;
         const conditionOperation = document.getElementById(`conditionOperation${i}`).value;
+        
+        if (!document.getElementById(`selectValue${i}`)) {
+            showResult.textContent="Please input the conditions!";
+            return;
+        }
         let selectValue = document.getElementById(`selectValue${i}`).value;
         if (selectOptions === "orderDate") selectValue =  `TO_DATE('${selectValue}', 'YYYY-MM-DD')`;
         console.log(selectValue);
@@ -379,8 +450,6 @@ async function selectOrderTable() {
     const content = responseData.data;
 
     console.log(content);
-    const showResult = document.getElementById('updateResult');
-    showResult.innerHTML = "";
 
     if (content.length === 0) {
         showResult.textContent="No data that matches the conditions";
@@ -477,6 +546,20 @@ async function projectOrderTable() {
     } 
 }
 
+function hideShowOrder(sectionId) {
+    const sectionList = ['insertOrderPage', 'updateOrderPage', 'selectOrderPage', "projectOrderPage"];
+    for (const sectionName of sectionList) {
+        const section = document.getElementById(sectionName);
+        if (!section.classList.contains('hidden')) {
+            section.classList.add('hidden');
+        }
+    }
+    const section = document.getElementById(sectionId);
+    if (section.classList.contains('hidden')) {
+        section.classList.remove('hidden');
+    } 
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -493,6 +576,7 @@ window.onload = function() {
     document.getElementById("resetTables").addEventListener("click", resetTables);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
     document.getElementById("deleteRouteTable").addEventListener("submit", deleteRouteTable);
+    document.getElementById("joinRouteTable").addEventListener("submit", joinRouteTable);
 
     document.getElementById("insertOrderTable").addEventListener("submit", insertOrderTable);
     document.getElementById("updateOrderTable").addEventListener("submit", updateOrderTable);
@@ -501,4 +585,13 @@ window.onload = function() {
     document.getElementById("resetConditionUpdate").addEventListener("click", resetConditions);
     document.getElementById("selectOrderTable").addEventListener("submit", selectOrderTable);
     document.getElementById("projectOrderTable").addEventListener("submit", projectOrderTable);
+
+    document.getElementById('hideShowInsertOrder').addEventListener('click', function() {hideShowOrder('insertOrderPage');});
+    document.getElementById('hideShowUpdateOrder').addEventListener('click', function() {hideShowOrder('updateOrderPage');});
+    document.getElementById('hideShowSelectOrder').addEventListener('click', function() {hideShowOrder('selectOrderPage');});
+    document.getElementById('hideShowProjectOrder').addEventListener('click', function() {hideShowOrder('projectOrderPage');});
+
+    document.getElementById('hideShowInsertRoute').addEventListener('click', function() {hideShowRoute('insertRoutePage');});
+    document.getElementById('hideShowDeleteRoute').addEventListener('click', function() {hideShowRoute('deleteRoutePage');});
+    document.getElementById('hideShowJoinRoute').addEventListener('click', function() {hideShowRoute('joinRoutePage');});
 };

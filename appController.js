@@ -49,6 +49,20 @@ router.delete("/delete-routeTable", async (req, res) => {
     }
 });
 
+router.get('/join-routeTable', async (req, res) => {
+    const { selectQuery } = req.query;  
+    if (!selectQuery) {
+        return res.status(400).json({ error: "selectQuery parameter is required" });
+    }
+
+    try {
+        const selectResult = await appService.joinRouteTable(selectQuery);
+        res.json({ data: selectResult });
+    } catch (error) {
+        res.status(500).json({ error: "Error executing the query", message: error.message });
+    }
+});
+
 router.get('/routeTable', async (req, res) => {
     const tableContent = await appService.fetchRouteTableFromDb();
     res.json({data: tableContent});

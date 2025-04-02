@@ -126,6 +126,20 @@ async function deleteRouteTable(routeId) {
     });
 }  
 
+async function joinRouteTable(selectQuery) {
+    return await withOracleDB(async (connection) => {
+        // console.log(selectQuery);
+        const result = await connection.execute(
+            `SELECT o.orderId, o.customerId, o.weight, o.routeId, TO_CHAR(o.orderDate, 'YYYY-MM-DD'), l1.address, l2.address, r.distance
+            FROM ORDERTABLE o, ROUTETABLE r, LOCATIONTABLE l1, LOCATIONTABLE l2
+            WHERE o.routeId = r.routeId AND r.origin = l1.coordinate AND r.destination = l2.coordinate AND r.distance >= ${selectQuery}`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchRouteTableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM ROUTETABLE');
@@ -767,6 +781,7 @@ module.exports = {
     insertRouteTable,
     fetchRouteTableFromDb,
     deleteRouteTable,
+    joinRouteTable,
     insertOrderTable,
     fetchOrderTableFromDb,
     updateOrderTable,
