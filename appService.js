@@ -318,7 +318,7 @@ async function updateCustomerTable(customerID, attribute, newValue) {
 async function selectCustomerTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT invoiceID, issueDate, status, orderID FROM CUSTOMERTABLE WHERE ${selectQuery}`
+            `SELECT customerID, phoneNumber, email, name FROM CUSTOMERTABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -450,7 +450,7 @@ async function deleteDispatcherTable(employeeID) {
 async function insertDriversTable(employeeID, licenseID, hoursDriven) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO DRIVERTABLE (employeeID, licenseID, hoursDriven) 
+            `INSERT INTO DRIVERSTABLE (employeeID, licenseID, hoursDriven) 
             VALUES (:employeeID, :licenseID, :hoursDriven)`,
             [employeeID, licenseID, hoursDriven],
             { autoCommit: true }
@@ -787,4 +787,8 @@ module.exports = {
     updateAssignedTable,
     selectAssignedTable,
     deleteAssignedTable,
+    insertLocationTable,
+    selectLocationTable,
+    updateLocationTable,
+    deleteLocationTable,
 };
