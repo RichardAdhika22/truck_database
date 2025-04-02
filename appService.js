@@ -97,6 +97,7 @@ async function executeSqlFile() {
 // ROUTE TABLE
 // =======================
 
+// QUERY 1: Insert
 async function insertRouteTable(routeId, origin, destination, distance) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -111,6 +112,7 @@ async function insertRouteTable(routeId, origin, destination, distance) {
     });
 }  
 
+// QUERY 3: Delete
 async function deleteRouteTable(routeId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -126,6 +128,7 @@ async function deleteRouteTable(routeId) {
     });
 }  
 
+// QUERY 6: Join (Find orders using route with distance at least the given input)
 async function joinRouteTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         // console.log(selectQuery);
@@ -140,6 +143,7 @@ async function joinRouteTable(selectQuery) {
     });
 }
 
+// QUERY 10: Division (Find all routes that are used by all order dates.)
 async function findRouteDateRouteTable() {
     return await withOracleDB(async (connection) => {
         // console.log(selectQuery);
@@ -199,6 +203,7 @@ async function fetchOrderTableFromDb() {
     });
 }
 
+// QUERY 2: Update
 async function updateOrderTable(orderId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
         let result;
@@ -222,6 +227,7 @@ async function updateOrderTable(orderId, attribute, newValue) {
     });
 }
 
+// QUERY 4: Select
 async function selectOrderTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -233,6 +239,7 @@ async function selectOrderTable(selectQuery) {
     });
 }
 
+// QUERY 5: Projection
 async function projectOrderTable(projectQuery) {
     return await withOracleDB(async (connection) => {
         if (projectQuery.includes("orderDate")) {
@@ -249,6 +256,7 @@ async function projectOrderTable(projectQuery) {
     });
 }
 
+// QUERY 7: Group By (count the number of orders for each customer, sorted from highest to lowest)
 async function countCustomerOrderTable() {
     return await withOracleDB(async (connection) => {
         // console.log(selectQuery);
@@ -264,6 +272,7 @@ async function countCustomerOrderTable() {
     });
 }
 
+// QUERY 8: Having (find the earliest departure time of dates that have at least 2 orders)
 async function findDateOrderTable() {
     return await withOracleDB(async (connection) => {
         // console.log(selectQuery);
@@ -279,6 +288,7 @@ async function findDateOrderTable() {
     });
 }
 
+// QUERY 9: Nested Group By (find the order which has weight greater than or equal to the average weight of order for each day)
 async function findWeightOrderTable() {
     return await withOracleDB(async (connection) => {
         // console.log(selectQuery);

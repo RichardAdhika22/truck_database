@@ -473,6 +473,8 @@ function handleSelectOptions(count) {
 
 function resetConditions() {
     const formContainer = document.getElementById('selectOrderTable');
+    const tableResult = document.getElementById('updateResult');
+    tableResult.innerHTML="";
     
     while (formContainer.children.length > 2) {
         formContainer.removeChild(formContainer.children[formContainer.children.length - 2]);
