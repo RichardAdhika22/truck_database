@@ -51,7 +51,7 @@ BEGIN
     END LOOP;
 
     EXECUTE IMMEDIATE 'CREATE TABLE LOCATIONTABLE (
-        coordinate VARCHAR2(30) PRIMARY KEY,
+        coordinate VARCHAR2(70) PRIMARY KEY,
         city VARCHAR2(20),
         address VARCHAR2(40) NOT NULL,
         capacity INT,
