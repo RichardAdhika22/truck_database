@@ -227,6 +227,49 @@ function hideShowRoute(sectionId) {
     } 
 }
 
+async function findRouteDateRouteTable() {
+    event.preventDefault();
+    const showResult = document.getElementById('findRouteDateResult');
+    showResult.innerHTML = "";
+
+    const response = await fetch(`/findRouteDate-routeTable`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const responseData = await response.json();
+    const content = responseData.data;
+    console.log(content);
+
+    console.log(content);
+    if (content.length === 0) {
+        showResult.textContent="No data yet!";
+    } else {
+        const tableResult = document.createElement('table');
+        tableResult.id = 'countCustomerOrderTableResult';
+        tableResult.innerHTML = 
+        `<thead>
+            <tr>
+                <th>Route ID</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>`;
+        tableResult.border = "1";
+        showResult.appendChild(tableResult);
+
+        content.forEach(user => {
+            const row = tableResult.insertRow();
+            user.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    }
+}
+
 // =======================
 // ORDER TABLE
 // =======================
@@ -736,6 +779,7 @@ window.onload = function() {
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);
     document.getElementById("deleteRouteTable").addEventListener("submit", deleteRouteTable);
     document.getElementById("joinRouteTable").addEventListener("submit", joinRouteTable);
+    document.getElementById("findRouteDateRouteTable").addEventListener("submit", findRouteDateRouteTable);
 
     document.getElementById("insertOrderTable").addEventListener("submit", insertOrderTable);
     document.getElementById("updateOrderTable").addEventListener("submit", updateOrderTable);
@@ -759,4 +803,5 @@ window.onload = function() {
     document.getElementById('hideShowInsertRoute').addEventListener('click', function() {hideShowRoute('insertRoutePage');});
     document.getElementById('hideShowDeleteRoute').addEventListener('click', function() {hideShowRoute('deleteRoutePage');});
     document.getElementById('hideShowJoinRoute').addEventListener('click', function() {hideShowRoute('joinRoutePage');});
+    document.getElementById('hideShowFindRouteDateRoute').addEventListener('click', function() {hideShowRoute('findRouteDateRoutePage');});
 };

@@ -63,6 +63,15 @@ router.get('/join-routeTable', async (req, res) => {
     }
 });
 
+router.get('/findRouteDate-routeTable', async (req, res) => {
+    try {
+        const selectResult = await appService.findRouteDateRouteTable();
+        res.json({ data: selectResult });
+    } catch (error) {
+        res.status(500).json({ error: "Error executing the query", message: error.message });
+    }
+});
+
 router.get('/routeTable', async (req, res) => {
     const tableContent = await appService.fetchRouteTableFromDb();
     res.json({data: tableContent});

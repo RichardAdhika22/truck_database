@@ -140,6 +140,26 @@ async function joinRouteTable(selectQuery) {
     });
 }
 
+async function findRouteDateRouteTable() {
+    return await withOracleDB(async (connection) => {
+        // console.log(selectQuery);
+        const result = await connection.execute(
+            `SELECT r.routeId
+            FROM ROUTETABLE r
+            WHERE NOT EXISTS (
+                SELECT o1.orderDate FROM ORDERTABLE o1 
+                MINUS (
+                    SELECT o2.orderDate FROM ORDERTABLE o2
+                    WHERE r.routeId=o2.routeId
+                )
+            )`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchRouteTableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM ROUTETABLE');
@@ -826,6 +846,7 @@ module.exports = {
     fetchRouteTableFromDb,
     deleteRouteTable,
     joinRouteTable,
+    findRouteDateRouteTable,
     insertOrderTable,
     fetchOrderTableFromDb,
     updateOrderTable,
