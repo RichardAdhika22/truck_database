@@ -53,7 +53,7 @@ BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE LOCATIONTABLE (
         coordinate VARCHAR2(70) PRIMARY KEY,
         city VARCHAR2(20),
-        address VARCHAR2(40) NOT NULL,
+        address VARCHAR2(70) NOT NULL,
         capacity INT,
         trucksParked INT,
         closeTime CHAR(5),
@@ -62,8 +62,8 @@ BEGIN
 
     EXECUTE IMMEDIATE 'CREATE TABLE ROUTETABLE (
         routeId CHAR(6) PRIMARY KEY,
-        origin VARCHAR2(30) NOT NULL,
-        destination VARCHAR2(30) NOT NULL,
+        origin VARCHAR2(70) NOT NULL,
+        destination VARCHAR2(70) NOT NULL,
         distance NUMBER,
         FOREIGN KEY (origin) REFERENCES LOCATIONTABLE(coordinate)
             ON DELETE CASCADE,
@@ -89,7 +89,7 @@ BEGIN
         sin CHAR(9) UNIQUE,
         phoneNumber CHAR(12),
         email VARCHAR2(30),
-        workLocation VARCHAR2(30),
+        workLocation VARCHAR2(70),
         FOREIGN KEY (workLocation) REFERENCES LOCATIONTABLE(coordinate)
             ON DELETE SET NULL
     )';
