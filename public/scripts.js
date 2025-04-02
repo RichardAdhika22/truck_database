@@ -410,6 +410,64 @@ async function selectOrderTable() {
     }
 }
 
+async function projectOrderTable() {
+    event.preventDefault();
+    const checkboxes = document.querySelectorAll('input[name="attributes"]:checked');
+
+    const selectedValues = [];
+    
+    checkboxes.forEach(function(checkbox) {
+        selectedValues.push(checkbox.value);
+    });
+    const columnsAsString = selectedValues.join(', ')
+    console.log(columnsAsString);
+
+    const response = await fetch(`/project-orderTable?projectQuery=${encodeURIComponent(columnsAsString)}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const responseData = await response.json();
+    // const messageElement = document.getElementById('selectOrderResultMsg');
+    const content = responseData.data;
+
+    const projectOrderTable = document.getElementById('projectOrderTable');
+    if (content.length === 0) {
+        const noResultsMessage = document.createElement('div');
+        noResultsMessage.textContent = 'No results found.';
+        projectOrderTable.appendChild(noResultsMessage);
+    } else {
+        const tableResult = document.createElement('table');
+        tableResult.id = 'projectOrderTableResult';
+        // Create table header based on selected columns
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+
+        selectedValues.forEach((value) => {
+            const th = document.createElement('th');
+            th.textContent = value;
+            headerRow.appendChild(th);
+        });
+
+        thead.appendChild(headerRow);
+        tableResult.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        tableResult.appendChild(tbody);
+        projectOrderTable.innerHTML = ''; 
+        projectOrderTable.appendChild(tableResult);
+
+        content.forEach(user => {
+            const row = tableResult.insertRow();
+            user.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    } 
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -431,4 +489,5 @@ window.onload = function() {
     document.getElementById("addConditionUpdate").addEventListener("click", addConditionUpdate);
     document.getElementById("resetConditionUpdate").addEventListener("click", resetConditions);
     document.getElementById("selectOrderTable").addEventListener("submit", selectOrderTable);
+    document.getElementById("projectOrderTable").addEventListener("submit", projectOrderTable);
 };

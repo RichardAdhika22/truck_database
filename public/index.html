@@ -89,11 +89,11 @@
                 </div>
                 <div class="form-group">
                     <label for="insertOrderInvoiceId">Invoice ID :</label>
-                    <input type="text" id="insertOrderId" placeholder="6-characters ID" required minlength="6" maxlength="6">
+                    <input type="text" id="insertOrderInvoiceId" placeholder="6-characters ID" required minlength="6" maxlength="6">
                 </div>
                 <div class="form-group">
                     <label for="insertOrderDispatcherId">Dispatcher ID: </label>
-                    <input type="text" id="insertOrderCustomerId" placeholder="6-characters ID" minlength="6" maxlength="6">
+                    <input type="text" id="insertOrderDispatcherId" placeholder="6-characters ID" minlength="6" maxlength="6">
                 </div>
             </div>
             <div class="submitAndResult">
@@ -167,6 +167,23 @@
                 <button id="addConditionUpdate">Add Condition</button>
                 <button id="resetConditionUpdate" type="button">Reset</button>
                 <button type="submit"> Select </button> <br>
+            </div>
+        </form>
+
+        <h3>Choose columns to view (projection)</h3>
+        <form id = "projectOrderTable">
+            <div class="form-group">
+                <label><input type="checkbox" name="attributes" value="customerId" style="width:20px;"> Customer ID</label><br>
+                <label><input type="checkbox" name="attributes" value="weight" style="width:20px;"> Weight</label><br>
+                <label><input type="checkbox" name="attributes" value="routeId" style="width:20px;"> Route ID</label><br>
+                <label><input type="checkbox" name="attributes" value="orderDate" style="width:20px;"> Date</label><br>
+                <label><input type="checkbox" name="attributes" value="departureTime" style="width:20px;"> Departure Time</label><br>
+                <label><input type="checkbox" name="attributes" value="arrivalTime" style="width:20px;"> Arrival Time</label><br>
+                <label><input type="checkbox" name="attributes" value="invoiceId" style="width:20px;"> Invoice ID</label><br>
+                <label><input type="checkbox" name="attributes" value="dispatcherId" style="width:20px;"> Dispatcher ID</label><br>
+            </div>
+            <div class="submitAndResult">
+                <button type="submit"> Project </button> <br>
             </div>
         </form>
     </div>

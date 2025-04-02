@@ -98,6 +98,17 @@ router.get('/select-orderTable', async (req, res) => {
     }
 });
 
+router.get('/project-orderTable', async (req, res) => {
+    const { projectQuery } = req.query;  
+
+    try {
+        const projectResult = await appService.projectOrderTable(projectQuery);
+        res.json({ data: projectResult });
+    } catch (error) {
+        res.status(500).json({ error: "Error executing the query", message: error.message });
+    }
+});
+
 router.delete("/delete-orderTable", async (req, res) => {
     const { orderId } = req.body;
     const deleteResult = await appService.deleteOrderTable(orderId);
