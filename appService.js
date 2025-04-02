@@ -259,6 +259,20 @@ async function findDateOrderTable() {
     });
 }
 
+async function findWeightOrderTable() {
+    return await withOracleDB(async (connection) => {
+        // console.log(selectQuery);
+        const result = await connection.execute(
+            `SELECT o.orderId, o.weight
+            FROM ORDERTABLE o
+            WHERE o.weight >= ALL (SELECT AVG(o2.weight) FROM ORDERTABLE o2 GROUP BY o2.orderDate)`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function deleteOrderTable(orderId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -819,6 +833,7 @@ module.exports = {
     projectOrderTable,
     countCustomerOrderTable,
     findDateOrderTable,
+    findWeightOrderTable,
     deleteOrderTable,
     insertInvoiceTable,
     updateInvoiceTable,

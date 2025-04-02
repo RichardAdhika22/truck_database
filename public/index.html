@@ -61,6 +61,7 @@
             <button id="hideShowProjectOrder">Project</button>
             <button id="hideShowCountCustomerOrder">Count Customers</button>
             <button id="hideShowFindDateOrder">Find Dates</button>
+            <button id="hideShowFindWeightOrder">Find Weight</button>
         </div>
             
         <div id="insertOrderPage" class="hidden">
@@ -213,7 +214,7 @@
         <div id="countCustomerOrderPage" class="hidden">
             <h3>Count Customers</h3>
             <form id="countCustomerOrderTable">
-                <div class="tableDiv form-group" style="max-width: 400px;">
+                <div class="form-group">
                     Count the number of orders for each customer.
                     <button type="submit"> Submit </button> <br>
                 </div>
@@ -224,11 +225,22 @@
         <div id="findDateOrderPage" class="hidden">
             <h3>Find Dates</h3>
             <form id="findDateOrderTable">
-                <div class="tableDiv form-group">
+                <div class="form-group">
                     Find the earliest departure time for each date with at least 2 orders.
                     <button type="submit"> Submit </button> <br>
                 </div>
                 <div id="findDateResult"></div>
+            </form>
+        </div>
+
+        <div id="findWeightOrderPage" class="hidden">
+            <h3>Find Weight</h3>
+            <form id="findWeightOrderTable">
+                <div class="form-group">
+                    Find orders with weight greater than or equal to all average weight of order for each day.
+                    <button type="submit"> Submit </button> <br>
+                </div>
+                <div id="findWeightResult"></div>
             </form>
         </div>
     </div>

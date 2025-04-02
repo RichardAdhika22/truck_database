@@ -140,6 +140,15 @@ router.get('/findDate-orderTable', async (req, res) => {
     }
 });
 
+router.get('/findWeight-orderTable', async (req, res) => {
+    try {
+        const selectResult = await appService.findWeightOrderTable();
+        res.json({ data: selectResult });
+    } catch (error) {
+        res.status(500).json({ error: "Error executing the query", message: error.message });
+    }
+});
+
 router.delete("/delete-orderTable", async (req, res) => {
     const { orderId } = req.body;
     const deleteResult = await appService.deleteOrderTable(orderId);
