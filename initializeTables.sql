@@ -54,14 +54,14 @@ BEGIN
         coordinate VARCHAR2(30) PRIMARY KEY,
         city VARCHAR2(20),
         address VARCHAR2(40) NOT NULL,
-        capacity NUMBER,
-        trucksParked NUMBER,
+        capacity INT,
+        trucksParked INT,
         closeTime CHAR(5),
         openTime CHAR(5)
     )';
 
     EXECUTE IMMEDIATE 'CREATE TABLE ROUTETABLE (
-        routeId CHAR(6) PRIMARY KEY,
+        routeID CHAR(6) PRIMARY KEY,
         origin VARCHAR2(30) NOT NULL,
         destination VARCHAR2(30) NOT NULL,
         distance NUMBER,
@@ -72,65 +72,103 @@ BEGIN
     )';
 
     EXECUTE IMMEDIATE 'CREATE TABLE ORDERTABLE (
-        orderId CHAR(6) PRIMARY KEY,
-        customerId CHAR(6) NOT NULL,
+        orderID CHAR(6) PRIMARY KEY,
+        customerID CHAR(6) NOT NULL,
         weight NUMBER,
-        routeId CHAR(6) NOT NULL,
+        routeID CHAR(6) NOT NULL,
         orderDate DATE,
-        departureTime CHAR(8),
-        arrivalTime CHAR(8),
-        FOREIGN KEY (routeId) REFERENCES ROUTETABLE(routeId)
+        departureTime CHAR(5),
+        arrivalTime CHAR(5),
+        invoiceID CHAR(6) NOT NULL,
+        employeeID CHAR(6),
+        FOREIGN KEY (employeeID) REFERENCES EMPLOYEETABLE(employeeID)
+            ON DELETE NO ACTION,
+        FOREIGN KEY (routeID) REFERENCES ROUTETABLE(routeID)
+            ON DELETE NO ACTION,
+        FOREIGN KEY (invoiceID) REFERENCES INVOICETABLE(invoiceID)
+            ON DELETE NO ACTION,
+        FOREIGN KEY (customerID) REFERENCES CUSTOMERTABLE(customerID)
+            ON DELETE NO ACTION    
+    )';
+
+
+    EXECUTE IMMEDIATE 'CREATE TABLE INVOICETABLE (
+        invoiceID CHAR(6) PRIMARY KEY,
+        issueDate DATE,
+        status CHAR(1),
+        orderID CHAR(6) NOT NULL,
+        FOREIGN KEY (orderID) REFERENCES ORDERTABLE(routeID)
             ON DELETE CASCADE
     )';
 
-    EXECUTE IMMEDIATE 'INSERT INTO LOCATIONTABLE (coordinate, city, address, capacity, trucksParked, closeTime, openTime) 
-                       VALUES (:coordinate, :city, :address, NULL, NULL, :closeTime, :openTime)' 
-    USING '49.25761407, -123.23615578', 'Vancouver', '5880 Hampton Pl', '08:00', '16:00';
 
-    EXECUTE IMMEDIATE 'INSERT INTO LOCATIONTABLE (coordinate, city, address, capacity, trucksParked, closeTime, openTime) 
-                       VALUES (:coordinate, :city, :address, NULL, NULL, :closeTime, :openTime)' 
-    USING '49.27048682, -123.15760743', 'Vancouver', '2324 W 1st Ave', '09:00', '21:00';
-
-    EXECUTE IMMEDIATE 'INSERT INTO LOCATIONTABLE (coordinate, city, address, capacity, trucksParked, closeTime, openTime) 
-                       VALUES (:coordinate, :city, :address, :capacity, :trucksParked, NULL, NULL)' 
-    USING '49.22764848, -123.06627330', 'Vancouver', '6195 Victoria Dr', 60, 23;
-
-    EXECUTE IMMEDIATE 'INSERT INTO LOCATIONTABLE (coordinate, city, address, capacity, trucksParked, closeTime, openTime) 
-                       VALUES (:coordinate, :city, :address, NULL, NULL, :closeTime, :openTime)' 
-    USING '49.13373432, -122.83702854', 'Surrey', '103 72 Ave', '09:00', '21:00';
-
-    EXECUTE IMMEDIATE 'INSERT INTO LOCATIONTABLE (coordinate, city, address, capacity, trucksParked, closeTime, openTime) 
-                       VALUES (:coordinate, :city, :address, NULL, NULL, :closeTime, :openTime)' 
-    USING '43.69039231, -79.28855125', 'Toronto', '3003 Danforth Ave', '12:00', '21:00';
-
-    EXECUTE IMMEDIATE 'INSERT INTO LOCATIONTABLE (coordinate, city, address, capacity, trucksParked, closeTime, openTime) 
-                       VALUES (:coordinate, :city, :address, :capacity, :trucksParked, NULL, NULL)' 
-    USING '43.65886249, -79.48819193', 'Toronto', '405 Jane St', 50, 44;
+    EXECUTE IMMEDIATE 'CREATE TABLE CUSTOMERTABLE (
+        customerID CHAR(6) PRIMARY KEY,
+        phoneNumber CHAR(12),
+        email VARCHAR2(30),
+        name VARCHAR2(25) NOT NULL
+    )';
 
 
-    EXECUTE IMMEDIATE 'INSERT INTO ROUTETABLE (routeId, origin, destination, distance) 
-                       VALUES (:routeId, :origin, :destination, :distance)' 
-    USING 'r00001', '49.25761407, -123.23615578', '49.27048682, -123.15760743', 10;
-
-    EXECUTE IMMEDIATE 'INSERT INTO ROUTETABLE (routeId, origin, destination, distance) 
-                       VALUES (:routeId, :origin, :destination, :distance)' 
-    USING 'r00002', '49.22764848, -123.06627330', '49.13373432, -122.83702854', 35;
-
-    EXECUTE IMMEDIATE 'INSERT INTO ROUTETABLE (routeId, origin, destination, distance) 
-                       VALUES (:routeId, :origin, :destination, :distance)' 
-    USING 'r00003', '43.69039231, -79.28855125', '43.65886249, -79.48819193', 22;
+    EXECUTE IMMEDIATE 'CREATE TABLE EMPLOYEETABLE(
+    employeeID CHAR(6) PRIMARY KEY,
+    sin CHAR(9) UNIQUE,
+    phoneNumber CHAR(12),
+    email VARCHAR2(30),
+    workLocation VARCHAR2(30),
+    FOREIGN KEY (workLocation) REFERENCES LOCATIONTABLE(coordinate)
+            ON DELETE SET NULL
+    )';
 
 
-    EXECUTE IMMEDIATE 'INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime) 
-                        VALUES (:orderId, :customerId, :weight, :routeId, TO_DATE(:orderDate, ''YYYY-MM-DD''), :departureTime, :arrivaltime)' 
-    USING 'o00001', 'c00001', 100, 'r00002', '2025-04-22', '06:00', '02:22';
+    EXECUTE IMMEDIATE 'CREATE TABLE DISPATCHERTABLE(
+    employeeID CHAR(6) PRIMARY KEY,
+    dispatcherID CHAR(6) UNIQUE,
+    FOREIGN KEY (employeeID) REFERENCES EMPLOYEETABLE(employeeID)
+            ON DELETE CASCADE
+    )';
 
-    EXECUTE IMMEDIATE 'INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime) 
-                        VALUES (:orderId, :customerId, :weight, :routeId, TO_DATE(:orderDate, ''YYYY-MM-DD''), :departureTime, :arrivaltime)' 
-    USING 'o00002', 'c00002', 150, 'r00001', '2025-03-29', '16:00', '23:45';
+    EXECUTE IMMEDIATE 'CREATE TABLE DRIVERTABLE(
+    employeeID CHAR(6) PRIMARY KEY,
+    licenceID CHAR(8) UNIQUE,
+    hoursDriven NUMBER,
+    FOREIGN KEY (employeeID) REFERENCES EMPLOYEETABLE(employeeID)
+            ON DELETE CASCADE
+    )';
 
-    EXECUTE IMMEDIATE 'INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime) 
-                        VALUES (:orderId, :customerId, :weight, :routeId, TO_DATE(:orderDate, ''YYYY-MM-DD''), :departureTime, :arrivaltime)' 
-    USING 'o00003', 'c00001', 300, 'r00001', '2025-04-01', '10:00', '22:00';
+    EXECUTE IMMEDIATE 'CREATE TABLE TRUCKTABLE(
+    plateNumber CHAR(6) PRIMARY KEY,
+    model VARCHAR2(10),
+    mileage INT,
+    status CHAR(1), 
+    parkedAt VARCHAR2(30),
+    FOREIGN KEY (parkedAt) REFERENCES LOCATIONTABLE(coordinate)
+            ON DELETE SET NULL
+    )';
+
+
+    EXECUTE IMMEDIATE 'CREATE TABLE DRIVERDRIVESTABLE(
+    plateNumber CHAR(6),
+    employeeID CHAR(6),
+    CONSTRAINT PK_Drives PRIMARY KEY (plateNumber,employeeID),
+    FOREIGN KEY (plateNumber) REFERENCES TRUCKTABLE(plateNumber)
+            ON DELETE SET NULL,
+    FOREIGN KEY (employeeID) REFERENCES EMPLOYEETABLE(employeeID)
+            ON DELETE SET NULL
+    )';
+
+
+    EXECUTE IMMEDIATE 'CREATE TABLE ASSIGNEDTABLE(
+    plateNumber CHAR(6),
+    employeeID CHAR(6),
+    orderID CHAR(6),
+    CONSTRAINT PK_Assigned PRIMARY KEY (plateNumber,employeeID,orderID),
+    FOREIGN KEY (plateNumber) REFERENCES DRIVERDRIVESTABLE(plateNumber)
+            ON DELETE SET NULL,
+    FOREIGN KEY (employeeID) REFERENCES DRIVERDRIVESTABLE(employeeID)
+            ON DELETE SET NULL,
+    FOREIGN KEY (orderID) REFERENCES ORDERTABLE(orderID)
+            ON DELETE CASCADE
+    )';
 
 END;
