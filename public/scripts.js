@@ -355,7 +355,9 @@ async function selectOrderTable() {
     for (let i = 1; i <= conditionCount; i++) {
         const selectOptions = document.getElementById(`selectOptions${i}`).value;
         const conditionOperation = document.getElementById(`conditionOperation${i}`).value;
-        const selectValue = document.getElementById(`selectValue${i}`).value;
+        let selectValue = document.getElementById(`selectValue${i}`).value;
+        if (selectOptions === "orderDate") selectValue =  `TO_DATE('${selectValue}', 'YYYY-MM-DD')`;
+        console.log(selectValue);
 
         if (i === 1) {
             selectQuery += `${selectOptions} ${conditionOperation} ${selectValue}`;
