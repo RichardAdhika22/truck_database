@@ -60,6 +60,7 @@
             <button id="hideShowSelectOrder">Select</button>
             <button id="hideShowProjectOrder">Project</button>
             <button id="hideShowCountCustomerOrder">Count Customers</button>
+            <button id="hideShowFindDateOrder">Find Dates</button>
         </div>
             
         <div id="insertOrderPage" class="hidden">
@@ -217,6 +218,17 @@
                     <button type="submit"> Submit </button> <br>
                 </div>
                 <div id="countCustomerResult"></div>
+            </form>
+        </div>
+
+        <div id="findDateOrderPage" class="hidden">
+            <h3>Find Dates</h3>
+            <form id="findDateOrderTable">
+                <div class="tableDiv form-group">
+                    Find the earliest departure time for each date with at least 2 orders.
+                    <button type="submit"> Submit </button> <br>
+                </div>
+                <div id="findDateResult"></div>
             </form>
         </div>
     </div>

@@ -244,6 +244,21 @@ async function countCustomerOrderTable() {
     });
 }
 
+async function findDateOrderTable() {
+    return await withOracleDB(async (connection) => {
+        // console.log(selectQuery);
+        const result = await connection.execute(
+            `SELECT TO_CHAR(orderDate, 'YYYY-MM-DD'), MIN(departureTime)
+            FROM ORDERTABLE
+            GROUP BY orderDate
+            HAVING COUNT(*) > 1`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function deleteOrderTable(orderId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -803,6 +818,7 @@ module.exports = {
     selectOrderTable,
     projectOrderTable,
     countCustomerOrderTable,
+    findDateOrderTable,
     deleteOrderTable,
     insertInvoiceTable,
     updateInvoiceTable,

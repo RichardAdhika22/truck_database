@@ -616,8 +616,53 @@ async function countCustomerOrderTable() {
     }
 }
 
+// for HAVING
+async function findDateOrderTable() {
+    event.preventDefault();
+    const showResult = document.getElementById('findDateResult');
+    showResult.innerHTML = "";
+
+    const response = await fetch(`/findDate-orderTable`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const responseData = await response.json();
+    const content = responseData.data;
+
+    console.log(content);
+    if (content.length === 0) {
+        showResult.textContent="No data yet!";
+    } else {
+        const tableResult = document.createElement('table');
+        tableResult.id = 'findDateOrderTableResult';
+        tableResult.innerHTML = 
+        `<thead>
+            <tr>
+                <th>Date</th>
+                <th>Earliest Departure Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>`;
+        tableResult.border = "1";
+        showResult.appendChild(tableResult);
+
+        content.forEach(user => {
+            const row = tableResult.insertRow();
+            user.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    }
+}
+
 function hideShowOrder(sectionId) {
-    const sectionList = ['insertOrderPage', 'updateOrderPage', 'selectOrderPage', 'projectOrderPage', 'countCustomerOrderPage'];
+    const sectionList = ['insertOrderPage', 'updateOrderPage', 'selectOrderPage', 
+        'projectOrderPage', 'countCustomerOrderPage', 'findDateOrderPage'];
     for (const sectionName of sectionList) {
         const section = document.getElementById(sectionName);
         if (!section.classList.contains('hidden')) {
@@ -656,12 +701,14 @@ window.onload = function() {
     document.getElementById("selectOrderTable").addEventListener("submit", selectOrderTable);
     document.getElementById("projectOrderTable").addEventListener("submit", projectOrderTable);
     document.getElementById("countCustomerOrderTable").addEventListener("submit", countCustomerOrderTable);
+    document.getElementById("findDateOrderTable").addEventListener("submit", findDateOrderTable);
 
     document.getElementById('hideShowInsertOrder').addEventListener('click', function() {hideShowOrder('insertOrderPage');});
     document.getElementById('hideShowUpdateOrder').addEventListener('click', function() {hideShowOrder('updateOrderPage');});
     document.getElementById('hideShowSelectOrder').addEventListener('click', function() {hideShowOrder('selectOrderPage');});
     document.getElementById('hideShowProjectOrder').addEventListener('click', function() {hideShowOrder('projectOrderPage');});
     document.getElementById('hideShowCountCustomerOrder').addEventListener('click', function() {hideShowOrder('countCustomerOrderPage');});
+    document.getElementById('hideShowFindDateOrder').addEventListener('click', function() {hideShowOrder('findDateOrderPage');});
 
     document.getElementById('hideShowInsertRoute').addEventListener('click', function() {hideShowRoute('insertRoutePage');});
     document.getElementById('hideShowDeleteRoute').addEventListener('click', function() {hideShowRoute('deleteRoutePage');});
