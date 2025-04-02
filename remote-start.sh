@@ -40,8 +40,8 @@ for PORT in $(seq $START $END); do
         TEMP_PID=$!
 
         # Update the port number in the .env file
-        sed -i "/^PORT=/c\PORT=$PORT" $ENV_SERVER_PATH
-        echo "Updated $ENV_SERVER_PATH with PORT=$PORT."
+        # sed -i "/^PORT=/c\PORT=$PORT" $ENV_SERVER_PATH
+        # echo "Updated $ENV_SERVER_PATH with PORT=$PORT."
 
         # Kill the temporary process
         kill $TEMP_PID

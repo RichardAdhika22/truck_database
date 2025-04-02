@@ -199,6 +199,17 @@ async function selectOrderTable(selectQuery) {
     });
 }
 
+async function projectOrderTable(projectQuery) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT ${projectQuery} FROM ORDERTABLE`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function deleteOrderTable(orderId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -755,6 +766,7 @@ module.exports = {
     fetchOrderTableFromDb,
     updateOrderTable,
     selectOrderTable,
+    projectOrderTable,
     deleteOrderTable,
     insertInvoiceTable,
     updateInvoiceTable,
