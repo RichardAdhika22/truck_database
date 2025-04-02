@@ -318,7 +318,7 @@ async function insertOrderTable(event) {
         messageElement.textContent = "Data inserted successfully!";
         fetchTableData();
     } else {
-        messageElement.textContent = "Error inserting data!";
+        messageElement.textContent = "Error inserting data (please check if the there are duplicated IDs or non-existing IDs for Customer, Route, Invoice, or Dispatcher)!";
     }
 }
 
@@ -347,7 +347,7 @@ async function updateOrderTable(event) {
         messageElement.textContent = "The specified attribute updated successfully!";
         fetchTableData();
     } else {
-        messageElement.textContent = "Error updating the specified attribute!";
+        messageElement.textContent = "Error updating the specified attribute! (Please check whether new value exists for IDs)";
     }
 }
 
@@ -365,25 +365,25 @@ function handleUpdateOptions() {
                 <input type="text" id="newOrderValue" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
     } else if (selectedValue === "weight") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Weight: </label>
-                <input type="number" id="newOrderValue" placeholder="Enter Item Weight (in Kg)">`;
+                <input type="number" id="newOrderValue" placeholder="Enter Item Weight (in Kg)" required>`;
     } else if (selectedValue === "routeId") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Route ID: </label>
                 <input type="text" id="newOrderValue" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
     } else if (selectedValue === "orderDate") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Date :</label>
-                <input type="date" id="newOrderValue">`
+                <input type="date" id="newOrderValue" required>`
     } else if (selectedValue === "departureTime") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Departure Time: </label>
-                <input type="time" id="newOrderValue">`
+                <input type="time" id="newOrderValue" required>`
     } else if (selectedValue === "arrivalTime") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Arrival Time: </label>
-                <input type="time" id="newOrderValue">`
+                <input type="time" id="newOrderValue" required>`
     } else if (selectedValue === "invoiceId") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Invoice ID: </label>
-                <input type="text" id="newOrderValue">`
+                <input type="text" id="newOrderValue" required placeholder="6-characters ID">`
     } else if (selectedValue === "dispatcherId") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Dispatcher ID: </label>
-                <input type="text" id="newOrderValue">`
+                <input type="text" id="newOrderValue" required placeholder="6-characters ID">`
     }
 }
 
