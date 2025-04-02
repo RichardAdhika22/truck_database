@@ -41,8 +41,8 @@ router.post("/insert-routeTable", async (req, res) => {
 
 router.delete("/delete-routeTable", async (req, res) => {
     const { routeId} = req.body;
-    const insertResult = await appService.deleteRouteTable(routeId);
-    if (insertResult) {
+    const deleteResult = await appService.deleteRouteTable(routeId);
+    if (deleteResult) {
         res.json({ success: true });
     } else {
         res.status(500).json({ success: false });
@@ -58,6 +58,11 @@ router.get('/routeTable', async (req, res) => {
 // ORDER TABLE
 // =======================
 
+router.get('/orderTable', async (req, res) => {
+    const tableContent = await appService.fetchOrderTableFromDb();
+    res.json({data: tableContent});
+});
+
 router.post("/insert-orderTable", async (req, res) => {
     const { orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime } = req.body;
     const insertResult = await appService.insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime);
@@ -66,11 +71,6 @@ router.post("/insert-orderTable", async (req, res) => {
     } else {
         res.status(500).json({ success: false });
     }
-});
-
-router.get('/orderTable', async (req, res) => {
-    const tableContent = await appService.fetchOrderTableFromDb();
-    res.json({data: tableContent});
 });
 
 router.post("/update-orderTable", async (req, res) => {
@@ -98,14 +98,446 @@ router.get('/select-orderTable', async (req, res) => {
     }
 });
 
+router.delete("/delete-orderTable", async (req, res) => {
+    const { orderID } = req.body;
+    const deleteResult = await appService.deleteOrderTable(orderID);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 
 // =======================
 // LOCATION TABLE
 // =======================
 
+// get all
 router.get('/locationTable', async (req, res) => {
-    const tableContent = await appService.fetchLocationTableFromDb();
+    const tableContent = await appService.selectLocationTable("1=1");
     res.json({data: tableContent});
 });
+
+router.post("/insert-locationTable", async (req, res) => {
+    const { coordinate, city, address, capacity, trucksParked, closeTime, openTime } = req.body;
+    const insertResult = await appService.insertLocationTable(coordinate, city, address, capacity, trucksParked, closeTime, openTime);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.delete("/delete-locationTable", async (req, res) => {
+    const { coordinate } = req.body;
+    const deleteResult = await appService.deleteLocationTable(coordinate);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// ----------------------------------------------------------
+// INVOICE TABLE
+// ----------------------------------------------------------
+router.get('/invoiceTable', async (req, res) => {
+    const result = await appService.selectInvoiceTable("1=1");
+    res.json({ data: result });
+});
+
+router.post('/insert-invoiceTable', async (req, res) => {
+    const { invoiceID, issueDate, status, orderID } = req.body;
+    const insertResult = await appService.insertInvoiceTable(invoiceID, issueDate, status, orderID);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/update-invoiceTable', async (req, res) => {
+    const { invoiceID, attribute, newValue } = req.body;
+    const updateResult = await appService.updateInvoiceTable(invoiceID, attribute, newValue);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/select-invoiceTable', async (req, res) => {
+    const { selectQuery } = req.query;
+    if (!selectQuery) {
+        return res.status(400).json({ error: "Missing selectQuery parameter" });
+    }
+    try {
+        const queryResult = await appService.selectInvoiceTable(selectQuery);
+        res.json({ data: queryResult });
+    } catch (error) {
+        res.status(500).json({ error: "Query execution error", message: error.message });
+    }
+});
+
+router.delete('/delete-invoiceTable', async (req, res) => {
+    const { invoiceID } = req.body;
+    const deleteResult = await appService.deleteInvoiceTable(invoiceID);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// ----------------------------------------------------------
+// CUSTOMER TABLE
+// ----------------------------------------------------------
+router.get('/customerTable', async (req, res) => {
+    const result = await appService.selectCustomerTable("1=1");
+    res.json({ data: result });
+});
+
+router.post('/insert-customerTable', async (req, res) => {
+    const { customerID, phoneNumber, email, name } = req.body;
+    const insertResult = await appService.insertCustomerTable(customerID, phoneNumber, email, name);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/update-customerTable', async (req, res) => {
+    const { customerID, attribute, newValue } = req.body;
+    const updateResult = await appService.updateCustomerTable(customerID, attribute, newValue);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/select-customerTable', async (req, res) => {
+    const { selectQuery } = req.query;
+    if (!selectQuery) {
+        return res.status(400).json({ error: "Missing selectQuery parameter" });
+    }
+    try {
+        const queryResult = await appService.selectCustomerTable(selectQuery);
+        res.json({ data: queryResult });
+    } catch (error) {
+        res.status(500).json({ error: "Query error", message: error.message });
+    }
+});
+
+router.delete('/delete-customerTable', async (req, res) => {
+    const { customerID } = req.body;
+    const deleteResult = await appService.deleteCustomerTable(customerID);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// ----------------------------------------------------------
+// EMPLOYEE TABLE
+// ----------------------------------------------------------
+router.get('/employeeTable', async (req, res) => {
+    const result = await appService.selectEmployeeTable("1=1");
+    res.json({ data: result });
+});
+
+router.post('/insert-employeeTable', async (req, res) => {
+    const { employeeID, sin, phoneNumber, email, workLocation } = req.body;
+    const insertResult = await appService.insertEmployeeTable(
+        employeeID,
+        sin,
+        phoneNumber,
+        email,
+        workLocation
+    );
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/update-employeeTable', async (req, res) => {
+    const { employeeID, attribute, newValue } = req.body;
+    const updateResult = await appService.updateEmployeeTable(employeeID, attribute, newValue);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/select-employeeTable', async (req, res) => {
+    const { selectQuery } = req.query;
+    if (!selectQuery) {
+        return res.status(400).json({ error: "selectQuery is required" });
+    }
+    try {
+        const queryResult = await appService.selectEmployeeTable(selectQuery);
+        res.json({ data: queryResult });
+    } catch (error) {
+        res.status(500).json({ error: "Query error", message: error.message });
+    }
+});
+
+router.delete('/delete-employeeTable', async (req, res) => {
+    const { employeeID } = req.body;
+    const deleteResult = await appService.deleteEmployeeTable(employeeID);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// ----------------------------------------------------------
+// DISPATCHER TABLE
+// ----------------------------------------------------------
+router.get('/dispatcherTable', async (req, res) => {
+    const result = await appService.selectDispatcherTable("1=1");
+    res.json({ data: result });
+});
+
+router.post('/insert-dispatcherTable', async (req, res) => {
+    const { employeeID, dispatcherID } = req.body;
+    const insertResult = await appService.insertDispatcherTable(employeeID, dispatcherID);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/select-dispatcherTable', async (req, res) => {
+    const { selectQuery } = req.query;
+    if (!selectQuery) {
+        return res.status(400).json({ error: "Missing selectQuery param" });
+    }
+    try {
+        const queryResult = await appService.selectDispatcherTable(selectQuery);
+        res.json({ data: queryResult });
+    } catch (error) {
+        res.status(500).json({ error: "Query error", message: error.message });
+    }
+});
+
+router.delete('/delete-dispatcherTable', async (req, res) => {
+    const { employeeID } = req.body;
+    const deleteResult = await appService.deleteDispatcherTable(employeeID);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// ----------------------------------------------------------
+// DRIVERS TABLE
+// ----------------------------------------------------------
+router.get('/driversTable', async (req, res) => {
+    const result = await appService.selectDriversTable("1=1");
+    res.json({ data: result });
+});
+
+router.post('/insert-driversTable', async (req, res) => {
+    const { employeeID, licenseID, hoursDriven } = req.body;
+    const insertResult = await appService.insertDriversTable(employeeID, licenseID, hoursDriven);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/update-driversTable', async (req, res) => {
+    const { employeeID, attribute, newValue } = req.body;
+    const updateResult = await appService.updateDriversTable(employeeID, attribute, newValue);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/select-driversTable', async (req, res) => {
+    const { selectQuery } = req.query;
+    if (!selectQuery) {
+        return res.status(400).json({ error: "Missing selectQuery param" });
+    }
+    try {
+        const queryResult = await appService.selectDriversTable(selectQuery);
+        res.json({ data: queryResult });
+    } catch (error) {
+        res.status(500).json({ error: "Query error", message: error.message });
+    }
+});
+
+router.delete('/delete-driversTable', async (req, res) => {
+    const { employeeID } = req.body;
+    const deleteResult = await appService.deleteDriversTable(employeeID);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// ----------------------------------------------------------
+// TRUCK TABLE
+// ----------------------------------------------------------
+router.get('/truckTable', async (req, res) => {
+    const result = await appService.selectTruckTable("1=1");
+    res.json({ data: result });
+});
+
+router.post('/insert-truckTable', async (req, res) => {
+    const { plateNumber, model, mileage, status, parkedAt } = req.body;
+    const insertResult = await appService.insertTruckTable(
+        plateNumber,
+        model,
+        mileage,
+        status,
+        parkedAt
+    );
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/update-truckTable', async (req, res) => {
+    const { plateNumber, attribute, newValue } = req.body;
+    const updateResult = await appService.updateTruckTable(plateNumber, attribute, newValue);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/select-truckTable', async (req, res) => {
+    const { selectQuery } = req.query;
+    if (!selectQuery) {
+        return res.status(400).json({ error: "Missing selectQuery param" });
+    }
+    try {
+        const queryResult = await appService.selectTruckTable(selectQuery);
+        res.json({ data: queryResult });
+    } catch (error) {
+        res.status(500).json({ error: "Query error", message: error.message });
+    }
+});
+
+router.delete('/delete-truckTable', async (req, res) => {
+    const { plateNumber } = req.body;
+    const deleteResult = await appService.deleteTruckTable(plateNumber);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// ----------------------------------------------------------
+// 11) DRIVERDRIVES TABLE
+// ----------------------------------------------------------
+router.get('/driverDrivesTable', async (req, res) => {
+    const result = await appService.selectDriverDrivesTable("1=1");
+    res.json({ data: result });
+});
+
+router.post('/insert-driverDrivesTable', async (req, res) => {
+    const { plateNumber, employeeID } = req.body;
+    const insertResult = await appService.insertDriverDrivesTable(plateNumber, employeeID);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/select-driverDrivesTable', async (req, res) => {
+    const { selectQuery } = req.query;
+    if (!selectQuery) {
+        return res.status(400).json({ error: "Missing selectQuery param" });
+    }
+    try {
+        const queryResult = await appService.selectDriverDrivesTable(selectQuery);
+        res.json({ data: queryResult });
+    } catch (error) {
+        res.status(500).json({ error: "Query error", message: error.message });
+    }
+});
+
+router.delete('/delete-driverDrivesTable', async (req, res) => {
+    const { plateNumber, employeeID } = req.body;
+    const deleteResult = await appService.deleteDriverDrivesTable(plateNumber, employeeID);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// ----------------------------------------------------------
+// ASSIGNED TABLE
+// ----------------------------------------------------------
+router.get('/assignedTable', async (req, res) => {
+    const result = await appService.selectAssignedTable("1=1");
+    res.json({ data: result });
+});
+
+router.post('/insert-assignedTable', async (req, res) => {
+    const { plateNumber, employeeID, orderID } = req.body;
+    const insertResult = await appService.insertAssignedTable(plateNumber, employeeID, orderID);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/update-assignedTable', async (req, res) => {
+    const { orderID, attribute, newValue } = req.body;
+    const updateResult = await appService.updateAssignedTable(orderID, attribute, newValue);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/select-assignedTable', async (req, res) => {
+    const { selectQuery } = req.query;
+    if (!selectQuery) {
+        return res.status(400).json({ error: "Missing selectQuery param" });
+    }
+    try {
+        const queryResult = await appService.selectAssignedTable(selectQuery);
+        res.json({ data: queryResult });
+    } catch (error) {
+        res.status(500).json({ error: "Query error", message: error.message });
+    }
+});
+
+router.delete('/delete-assignedTable', async (req, res) => {
+    const { orderID } = req.body;
+    const deleteResult = await appService.deleteAssignedTable(orderID);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 
 module.exports = router;
