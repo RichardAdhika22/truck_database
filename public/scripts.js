@@ -72,6 +72,11 @@ function fetchTableData() {
     fetchAndDisplayTable('locationTable');
     fetchAndDisplayTable('invoiceTable');
     fetchAndDisplayTable('customerTable');
+    fetchAndDisplayTable('employeeTable');
+    fetchAndDisplayTable('driverTable');
+    fetchAndDisplayTable('truckTable');
+    fetchAndDisplayTable('driverDrivesTable');
+    fetchAndDisplayTable('assignedTable');
 }
 
 async function resetTables() {
@@ -774,6 +779,11 @@ window.onload = function() {
     document.getElementById('hideShowLocation').addEventListener('click', function() {hideShow('locationPageContent');});
     document.getElementById('hideShowInvoice').addEventListener('click', function() {hideShow('invoicePageContent');});
     document.getElementById('hideShowCustomer').addEventListener('click', function() {hideShow('customerPageContent');});
+    document.getElementById('hideShowEmployee').addEventListener('click', function() {hideShow('employeePageContent');});
+    document.getElementById('hideShowDriver').addEventListener('click', function() {hideShow('driverPageContent');});
+    document.getElementById('hideShowTruck').addEventListener('click', function() {hideShow('truckPageContent');});
+    document.getElementById('hideShowDriverDrives').addEventListener('click', function() {hideShow('driverDrivesPageContent');});
+    document.getElementById('hideShowAssigned').addEventListener('click', function() {hideShow('assignedPageContent');});
 
     document.getElementById("resetTables").addEventListener("click", resetTables);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);

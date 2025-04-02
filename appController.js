@@ -400,16 +400,16 @@ router.delete('/delete-dispatcherTable', async (req, res) => {
 });
 
 // ----------------------------------------------------------
-// DRIVERS TABLE
+// DRIVER TABLE
 // ----------------------------------------------------------
-router.get('/driversTable', async (req, res) => {
-    const result = await appService.selectDriversTable("1=1");
+router.get('/driverTable', async (req, res) => {
+    const result = await appService.selectDriverTable("1=1");
     res.json({ data: result });
 });
 
-router.post('/insert-driversTable', async (req, res) => {
+router.post('/insert-driverTable', async (req, res) => {
     const { employeeId, licenseId, hoursDriven } = req.body;
-    const insertResult = await appService.insertDriversTable(employeeId, licenseId, hoursDriven);
+    const insertResult = await appService.insertDriverTable(employeeId, licenseId, hoursDriven);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -417,9 +417,9 @@ router.post('/insert-driversTable', async (req, res) => {
     }
 });
 
-router.post('/update-driversTable', async (req, res) => {
+router.post('/update-driverTable', async (req, res) => {
     const { employeeId, attribute, newValue } = req.body;
-    const updateResult = await appService.updateDriversTable(employeeId, attribute, newValue);
+    const updateResult = await appService.updateDriverTable(employeeId, attribute, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
@@ -427,13 +427,13 @@ router.post('/update-driversTable', async (req, res) => {
     }
 });
 
-router.get('/select-driversTable', async (req, res) => {
+router.get('/select-driverTable', async (req, res) => {
     const { selectQuery } = req.query;
     if (!selectQuery) {
         return res.status(400).json({ error: "Missing selectQuery param" });
     }
     try {
-        const queryResult = await appService.selectDriversTable(selectQuery);
+        const queryResult = await appService.selectDriverTable(selectQuery);
         res.json({ data: queryResult });
     } catch (error) {
         res.status(500).json({ error: "Query error", message: error.message });

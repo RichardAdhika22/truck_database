@@ -103,7 +103,7 @@ BEGIN
 
     EXECUTE IMMEDIATE 'CREATE TABLE DRIVERTABLE(
         employeeId CHAR(6) PRIMARY KEY,
-        licenceId CHAR(8) UNIQUE,
+        licenseId CHAR(8) UNIQUE,
         hoursDriven NUMBER,
         FOREIGN KEY (employeeId) REFERENCES EMPLOYEETABLE(employeeId)
             ON DELETE CASCADE

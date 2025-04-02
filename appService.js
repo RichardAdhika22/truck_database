@@ -541,10 +541,10 @@ async function deleteDispatcherTable(employeeId) {
 // DRIVER TABLE
 // ================
 
-async function insertDriversTable(employeeId, licenseId, hoursDriven) {
+async function insertDriverTable(employeeId, licenseId, hoursDriven) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO DRIVERSTABLE (employeeId, licenseId, hoursDriven) 
+            `INSERT INTO DRIVERTABLE (employeeId, licenseId, hoursDriven) 
             VALUES (:employeeId, :licenseId, :hoursDriven)`,
             [employeeId, licenseId, hoursDriven],
             { autoCommit: true }
@@ -556,11 +556,11 @@ async function insertDriversTable(employeeId, licenseId, hoursDriven) {
 }
 
 
-async function updateDriversTable(employeeId, attribute, newValue) {
+async function updateDriverTable(employeeId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
         let result;
         result = await connection.execute(
-            `UPDATE DRIVERSTABLE SET ${attribute}=:newValue WHERE employeeId=:employeeId`,
+            `UPDATE DRIVERTABLE SET ${attribute}=:newValue WHERE employeeId=:employeeId`,
             [newValue, employeeId],
             { autoCommit: true }
         );
@@ -571,10 +571,10 @@ async function updateDriversTable(employeeId, attribute, newValue) {
     });
 }
 
-async function selectDriversTable(selectQuery) {
+async function selectDriverTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT employeeId, licenseId, hoursDriven FROM DRIVERSTABLE WHERE ${selectQuery}`
+            `SELECT employeeId, licenseId, hoursDriven FROM DRIVERTABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -582,10 +582,10 @@ async function selectDriversTable(selectQuery) {
     });
 }
 
-async function deleteDriversTable(employeeId) {
+async function deleteDriverTable(employeeId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `DELETE FROM DRIVERSTABLE 
+            `DELETE FROM DRIVERTABLE 
             WHERE employeeId=:employeeId`,
             [employeeId],
             { autoCommit: true }
@@ -871,10 +871,10 @@ module.exports = {
     insertDispatcherTable,
     selectDispatcherTable,
     deleteDispatcherTable,
-    insertDriversTable,
-    updateDriversTable,
-    selectDriversTable,
-    deleteDriversTable,
+    insertDriverTable,
+    updateDriverTable,
+    selectDriverTable,
+    deleteDriverTable,
     insertTruckTable,
     updateTruckTable,
     selectTruckTable,

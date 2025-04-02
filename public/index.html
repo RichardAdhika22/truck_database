@@ -408,6 +408,109 @@
         </table>    
     </div>
 
+    <br><hr><br>
+
+    <div class="pageHeading">
+        <h2 class="pageTitle">Employees (including Dispatchers)</h2>
+        <button id="hideShowEmployee">Hide/Show</button>
+    </div>
+    <div id="employeePageContent" class="hidden">
+        <table id="employeeTable" border="1">
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>SIN</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Work Location</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>    
+    </div>
+
+    <br><hr><br>
+
+    <div class="pageHeading">
+        <h2 class="pageTitle">Drivers (part of Employees)</h2>
+        <button id="hideShowDriver">Hide/Show</button>
+    </div>
+    <div id="driverPageContent" class="hidden">
+        <table id="driverTable" border="1">
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>License ID</th>
+                    <th>Hours Driven</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>    
+    </div>
+
+    <br><hr><br>
+
+    <div class="pageHeading">
+        <h2 class="pageTitle">Trucks</h2>
+        <button id="hideShowTruck">Hide/Show</button>
+    </div>
+    <div id="truckPageContent" class="hidden">
+        <table id="truckTable" border="1">
+            <thead>
+                <tr>
+                    <th>Plate Number</th>
+                    <th>Model</th>
+                    <th>Mileage</th>
+                    <th>Status</th>
+                    <th>Parked At</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>    
+    </div>
+
+    <br><hr><br>
+
+    <div class="pageHeading">
+        <h2 class="pageTitle">Drivers and Trucks Relation</h2>
+        <button id="hideShowDriverDrives">Hide/Show</button>
+    </div>
+    <div id="driverDrivesPageContent" class="hidden">
+        <table id="driverDrivesTable" border="1">
+            <thead>
+                <tr>
+                    <th>Plate Number</th>
+                    <th>Employee ID</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>    
+    </div>
+
+    <br><hr><br>
+
+    <div class="pageHeading">
+        <h2 class="pageTitle">Driver and Orders Relation</h2>
+        <button id="hideShowAssigned">Hide/Show</button>
+    </div>
+    <div id="assignedPageContent" class="hidden">
+        <table id="assignedTable" border="1">
+            <thead>
+                <tr>
+                    <th>Plate Number</th>
+                    <th>Employee ID</th>
+                    <th>Order ID</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>    
+    </div>
+
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script type="module" src="scripts.js"></script>
