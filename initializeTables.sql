@@ -80,7 +80,7 @@ BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE CUSTOMERTABLE (
         customerId CHAR(6) PRIMARY KEY,
         phoneNumber CHAR(12),
-        email VARCHAR2(30),
+        email VARCHAR2(70),
         name VARCHAR2(25) NOT NULL
     )';
 
