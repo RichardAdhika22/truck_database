@@ -175,6 +175,8 @@ async function insertOrderTable(event) {
     const dateValue = document.getElementById('insertOrderDate').value;
     const departureTimeValue = document.getElementById('insertOrderDepartureTime').value;
     const arrivalTimeValue = document.getElementById('insertOrderArrivalTime').value;
+    const invoiceIdValue = document.getElementById('insertOrderInvoiceId').value;
+    const dispatcherIdValue = document.getElementById('insertOrderDispatcherId').value;
 
     const response = await fetch('/insert-orderTable', {
         method: 'POST',
@@ -188,7 +190,9 @@ async function insertOrderTable(event) {
             routeId: routeIdValue,
             orderDate: dateValue,
             departureTime: departureTimeValue,
-            arrivalTime: arrivalTimeValue
+            arrivalTime: arrivalTimeValue,
+            invoiceId: invoiceIdValue,
+            dispatcherId: dispatcherIdValue
         })
     });
 

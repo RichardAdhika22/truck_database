@@ -139,12 +139,12 @@ async function fetchRouteTableFromDb() {
 // ORDER TABLE
 // =======================
 
-async function insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime, invoiceID, employeeID) {
+async function insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime, invoiceId, employeeId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime, invoiceID, employeeID) 
-            VALUES (:orderId, :customerId, :weight, :routeId, TO_DATE(:orderDate, 'YYYY-MM-DD'), :departureTime, :arrivalTime, :invoiceID, :employeeID)`,
-            [orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime, invoiceID, employeeID],
+            `INSERT INTO ORDERTABLE (orderId, customerId, weight, routeId, orderDate, departureTime, arrivaltime, invoiceId, dispatcherId) 
+            VALUES (:orderId, :customerId, :weight, :routeId, TO_DATE(:orderDate, 'YYYY-MM-DD'), :departureTime, :arrivalTime, :invoiceId, :dispatcherId)`,
+            [orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime, invoiceId, employeeId],
             { autoCommit: true }
         );
 
@@ -157,7 +157,7 @@ async function insertOrderTable(orderId, customerId, weight, routeId, orderDate,
 async function fetchOrderTableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime FROM ORDERTABLE`
+            `SELECT orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime, invoiceId, dispatcherId FROM ORDERTABLE`
         );
         return result.rows;
     }).catch(() => {
@@ -199,12 +199,12 @@ async function selectOrderTable(selectQuery) {
     });
 }
 
-async function deleteOrderTable(orderID) {
+async function deleteOrderTable(orderId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM ORDERTABLE 
-            WHERE orderID=:orderID`,
-            [orderID],
+            WHERE orderId=:orderId`,
+            [orderId],
             { autoCommit: true }
         );
 
@@ -218,12 +218,12 @@ async function deleteOrderTable(orderID) {
 // INVOICE TABLE
 // =======================
 
-async function insertInvoiceTable(invoiceID, issueDate, status, orderID) {
+async function insertInvoiceTable(invoiceId, issueDate, status, orderId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO INVOICETABLE (invoiceID, issueDate, status, orderID) 
-            VALUES (:invoiceID, TO_DATE(:issueDate, 'YYYY-MM-DD'), :status, :orderID)`,
-            [invoiceID, issueDate, status, orderID],
+            `INSERT INTO INVOICETABLE (invoiceId, issueDate, status, orderId) 
+            VALUES (:invoiceId, TO_DATE(:issueDate, 'YYYY-MM-DD'), :status, :orderId)`,
+            [invoiceId, issueDate, status, orderId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -232,19 +232,19 @@ async function insertInvoiceTable(invoiceID, issueDate, status, orderID) {
     });
 }
 
-async function updateInvoiceTable(invoiceID, attribute, newValue) {
+async function updateInvoiceTable(invoiceId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
         let result;
         if (attribute === "issueDate") {
             result = await connection.execute(
-                `UPDATE INVOICETABLE SET ${attribute}=TO_DATE(:newValue, 'YYYY-MM-DD') WHERE invoiceID=:invoiceID`,
-                [newValue, invoiceID],
+                `UPDATE INVOICETABLE SET ${attribute}=TO_DATE(:newValue, 'YYYY-MM-DD') WHERE invoiceId=:invoiceId`,
+                [newValue, invoiceId],
                 { autoCommit: true }
             );
         } else {
             result = await connection.execute(
-                `UPDATE INVOICETABLE SET ${attribute}=:newValue WHERE invoiceID=:invoiceID`,
-                [newValue, invoiceID],
+                `UPDATE INVOICETABLE SET ${attribute}=:newValue WHERE invoiceId=:invoiceId`,
+                [newValue, invoiceId],
                 { autoCommit: true }
             );
         }
@@ -258,7 +258,7 @@ async function updateInvoiceTable(invoiceID, attribute, newValue) {
 async function selectInvoiceTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT invoiceID, issueDate, status, orderID FROM INVOICETABLE WHERE ${selectQuery}`
+            `SELECT invoiceId, issueDate, status, orderId FROM INVOICETABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -267,12 +267,12 @@ async function selectInvoiceTable(selectQuery) {
 }
 
 
-async function deleteInvoiceTable(invoiceID) {
+async function deleteInvoiceTable(invoiceId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM INVOICETABLE 
-            WHERE invoiceID=:invoiceID`,
-            [invoiceID],
+            WHERE invoiceId=:invoiceId`,
+            [invoiceId],
             { autoCommit: true }
         );
 
@@ -286,12 +286,12 @@ async function deleteInvoiceTable(invoiceID) {
 // CUSTOMER TABLE
 // ======================
 
-async function insertCustomerTable(customerID, phoneNumber, email, name) {
+async function insertCustomerTable(customerId, phoneNumber, email, name) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO CUSTOMERTABLE (customerID, phoneNumber, email, name) 
-            VALUES (:customerID, :phoneNumber, :email, :name)`,
-            [customerID, phoneNumber, email, name],
+            `INSERT INTO CUSTOMERTABLE (customerId, phoneNumber, email, name) 
+            VALUES (:customerId, :phoneNumber, :email, :name)`,
+            [customerId, phoneNumber, email, name],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -300,12 +300,12 @@ async function insertCustomerTable(customerID, phoneNumber, email, name) {
     });
 }
 
-async function updateCustomerTable(customerID, attribute, newValue) {
+async function updateCustomerTable(customerId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
         let result;
         result = await connection.execute(
-            `UPDATE CUSTOMERTABLE SET ${attribute}=:newValue WHERE customerID=:customerID`,
-            [newValue, customerID],
+            `UPDATE CUSTOMERTABLE SET ${attribute}=:newValue WHERE customerId=:customerId`,
+            [newValue, customerId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -318,7 +318,7 @@ async function updateCustomerTable(customerID, attribute, newValue) {
 async function selectCustomerTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT customerID, phoneNumber, email, name FROM CUSTOMERTABLE WHERE ${selectQuery}`
+            `SELECT customerId, phoneNumber, email, name FROM CUSTOMERTABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -326,12 +326,12 @@ async function selectCustomerTable(selectQuery) {
     });
 }
 
-async function deleteCustomerTable(customerID) {
+async function deleteCustomerTable(customerId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM CUSTOMERTABLE 
-            WHERE customerID=:customerID`,
-            [customerID],
+            WHERE customerId=:customerId`,
+            [customerId],
             { autoCommit: true }
         );
 
@@ -345,12 +345,12 @@ async function deleteCustomerTable(customerID) {
 // EMPLOYEE TABLE
 // =======================
 
-async function insertEmployeeTable(employeeID, sin, phoneNumber, email, workLocation) {
+async function insertEmployeeTable(employeeId, sin, phoneNumber, email, workLocation) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO EMPLOYEETABLE (employeeID, sin, phoneNumber, email, workLocation) 
-            VALUES (:employeeID, :sin, :phoneNumber, :email, :workLocation)`,
-            [employeeID, sin, phoneNumber, email, workLocation],
+            `INSERT INTO EMPLOYEETABLE (employeeId, sin, phoneNumber, email, workLocation) 
+            VALUES (:employeeId, :sin, :phoneNumber, :email, :workLocation)`,
+            [employeeId, sin, phoneNumber, email, workLocation],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -359,12 +359,12 @@ async function insertEmployeeTable(employeeID, sin, phoneNumber, email, workLoca
     });
 }
 
-async function updateEmployeeTable(employeeID, attribute, newValue) {
+async function updateEmployeeTable(employeeId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
         let result;
         result = await connection.execute(
-            `UPDATE EMPLOYEETABLE SET ${attribute}=:newValue WHERE employeeID=:employeeID`,
-            [newValue, employeeID],
+            `UPDATE EMPLOYEETABLE SET ${attribute}=:newValue WHERE employeeId=:employeeId`,
+            [newValue, employeeId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -377,7 +377,7 @@ async function updateEmployeeTable(employeeID, attribute, newValue) {
 async function selectEmployeeTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT employeeID, sin, phoneNumber, email, workLocation FROM EMPLOYEETABLE WHERE ${selectQuery}`
+            `SELECT employeeId, sin, phoneNumber, email, workLocation FROM EMPLOYEETABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -385,12 +385,12 @@ async function selectEmployeeTable(selectQuery) {
     });
 }
 
-async function deleteEmployeeTable(employeeID) {
+async function deleteEmployeeTable(employeeId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM EMPLOYEETABLE 
-            WHERE employeeID=:employeeID`,
-            [employeeID],
+            WHERE employeeId=:employeeId`,
+            [employeeId],
             { autoCommit: true }
         );
 
@@ -403,12 +403,12 @@ async function deleteEmployeeTable(employeeID) {
 // DISPATCHER TABLE
 // ================
 
-async function insertDispatcherTable(employeeID, dispatcherID) {
+async function insertDispatcherTable(employeeId, dispatcherId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO DISPATCHERTABLE (employeeID, dispatcherID) 
-            VALUES (:employeeID, :dispatcherID)`,
-            [employeeID, dispatcherID],
+            `INSERT INTO DISPATCHERTABLE (employeeId, dispatcherId) 
+            VALUES (:employeeId, :dispatcherId)`,
+            [employeeId, dispatcherId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -420,7 +420,7 @@ async function insertDispatcherTable(employeeID, dispatcherID) {
 async function selectDispatcherTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT employeeID, dispatcherID FROM DISPATCHERTABLE WHERE ${selectQuery}`
+            `SELECT employeeId, dispatcherId FROM DISPATCHERTABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -428,12 +428,12 @@ async function selectDispatcherTable(selectQuery) {
     });
 }
 
-async function deleteDispatcherTable(employeeID) {
+async function deleteDispatcherTable(employeeId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM DISPATCHERTABLE 
-            WHERE employeeID=:employeeID`,
-            [employeeID],
+            WHERE employeeId=:employeeId`,
+            [employeeId],
             { autoCommit: true }
         );
 
@@ -447,12 +447,12 @@ async function deleteDispatcherTable(employeeID) {
 // DRIVER TABLE
 // ================
 
-async function insertDriversTable(employeeID, licenseID, hoursDriven) {
+async function insertDriversTable(employeeId, licenseId, hoursDriven) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO DRIVERSTABLE (employeeID, licenseID, hoursDriven) 
-            VALUES (:employeeID, :licenseID, :hoursDriven)`,
-            [employeeID, licenseID, hoursDriven],
+            `INSERT INTO DRIVERSTABLE (employeeId, licenseId, hoursDriven) 
+            VALUES (:employeeId, :licenseId, :hoursDriven)`,
+            [employeeId, licenseId, hoursDriven],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -462,12 +462,12 @@ async function insertDriversTable(employeeID, licenseID, hoursDriven) {
 }
 
 
-async function updateDriversTable(employeeID, attribute, newValue) {
+async function updateDriversTable(employeeId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
         let result;
         result = await connection.execute(
-            `UPDATE DRIVERSTABLE SET ${attribute}=:newValue WHERE employeeID=:employeeID`,
-            [newValue, employeeID],
+            `UPDATE DRIVERSTABLE SET ${attribute}=:newValue WHERE employeeId=:employeeId`,
+            [newValue, employeeId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -480,7 +480,7 @@ async function updateDriversTable(employeeID, attribute, newValue) {
 async function selectDriversTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT employeeID, licenseID, hoursDriven FROM DRIVERSTABLE WHERE ${selectQuery}`
+            `SELECT employeeId, licenseId, hoursDriven FROM DRIVERSTABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -488,12 +488,12 @@ async function selectDriversTable(selectQuery) {
     });
 }
 
-async function deleteDriversTable(employeeID) {
+async function deleteDriversTable(employeeId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM DRIVERSTABLE 
-            WHERE employeeID=:employeeID`,
-            [employeeID],
+            WHERE employeeId=:employeeId`,
+            [employeeId],
             { autoCommit: true }
         );
 
@@ -567,12 +567,12 @@ async function deleteTruckTable(plateNumber) {
 // DRIVERDRIVES TABLE
 // =========================
 
-async function insertDriverDrivesTable(plateNumber, employeeID) {
+async function insertDriverDrivesTable(plateNumber, employeeId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO DRIVERDRIVESTABLE (plateNumber, employeeID) 
-            VALUES (:plateNumber, :employeeID)`,
-            [plateNumber, employeeID],
+            `INSERT INTO DRIVERDRIVESTABLE (plateNumber, employeeId) 
+            VALUES (:plateNumber, :employeeId)`,
+            [plateNumber, employeeId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -582,12 +582,12 @@ async function insertDriverDrivesTable(plateNumber, employeeID) {
 }
 
 
-async function updateDriverDrivesTable(plateNumber, employeeID, attribute, newValue) {
+async function updateDriverDrivesTable(plateNumber, employeeId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
         let result;
         result = await connection.execute(
-            `UPDATE DRIVERDRIVESTABLE SET ${attribute}=:newValue WHERE plateNumber=:plateNumber AND employeeID=:employeeID`,
-            [newValue, plateNumber, employeeID],
+            `UPDATE DRIVERDRIVESTABLE SET ${attribute}=:newValue WHERE plateNumber=:plateNumber AND employeeId=:employeeId`,
+            [newValue, plateNumber, employeeId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -600,7 +600,7 @@ async function updateDriverDrivesTable(plateNumber, employeeID, attribute, newVa
 async function selectDriverDrivesTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT plateNumber, employeeID FROM DRIVERDRIVESTABLE WHERE ${selectQuery}`
+            `SELECT plateNumber, employeeId FROM DRIVERDRIVESTABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -608,12 +608,12 @@ async function selectDriverDrivesTable(selectQuery) {
     });
 }
 
-async function deleteDriverDrivesTable(plateNumber, employeeID) {
+async function deleteDriverDrivesTable(plateNumber, employeeId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM DRIVERDRIVESTABLE 
-            WHERE plateNumber=:plateNumber AND employeeID=:employeeID`,
-            [plateNumber, employeeID],
+            WHERE plateNumber=:plateNumber AND employeeId=:employeeId`,
+            [plateNumber, employeeId],
             { autoCommit: true }
         );
 
@@ -627,12 +627,12 @@ async function deleteDriverDrivesTable(plateNumber, employeeID) {
 // ASSIGNED TABLE
 // =========================
 
-async function insertAssignedTable(plateNumber, employeeID, orderID) {
+async function insertAssignedTable(plateNumber, employeeId, orderId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO ASSIGNEDTABLE (plateNumber, employeeID, orderID) 
-            VALUES (:plateNumber, :employeeID, :orderID)`,
-            [plateNumber, employeeID, orderID],
+            `INSERT INTO ASSIGNEDTABLE (plateNumber, employeeId, orderId) 
+            VALUES (:plateNumber, :employeeId, :orderId)`,
+            [plateNumber, employeeId, orderId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -642,12 +642,12 @@ async function insertAssignedTable(plateNumber, employeeID, orderID) {
 }
 
 
-async function updateAssignedTable(orderID, attribute, newValue) {
+async function updateAssignedTable(orderId, attribute, newValue) {
     return await withOracleDB(async (connection) => {
         let result;
         result = await connection.execute(
-            `UPDATE ASSIGNEDTABLE SET ${attribute}=:newValue WHERE orderID=:orderID`,
-            [newValue, orderID],
+            `UPDATE ASSIGNEDTABLE SET ${attribute}=:newValue WHERE orderId=:orderId`,
+            [newValue, orderId],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -660,7 +660,7 @@ async function updateAssignedTable(orderID, attribute, newValue) {
 async function selectAssignedTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT plateNumber, employeeID, orderID FROM ASSIGNEDTABLE WHERE ${selectQuery}`
+            `SELECT plateNumber, employeeId, orderId FROM ASSIGNEDTABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -668,12 +668,12 @@ async function selectAssignedTable(selectQuery) {
     });
 }
 
-async function deleteAssignedTable(orderID) {
+async function deleteAssignedTable(orderId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM ASSIGNEDTABLE 
-            WHERE orderID=:orderID`,
-            [orderID],
+            WHERE orderId=:orderId`,
+            [orderId],
             { autoCommit: true }
         );
 

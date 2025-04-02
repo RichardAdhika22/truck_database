@@ -64,8 +64,8 @@ router.get('/orderTable', async (req, res) => {
 });
 
 router.post("/insert-orderTable", async (req, res) => {
-    const { orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime } = req.body;
-    const insertResult = await appService.insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime);
+    const { orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime, invoiceId, dispatcherId } = req.body;
+    const insertResult = await appService.insertOrderTable(orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime, invoiceId, dispatcherId);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -99,8 +99,8 @@ router.get('/select-orderTable', async (req, res) => {
 });
 
 router.delete("/delete-orderTable", async (req, res) => {
-    const { orderID } = req.body;
-    const deleteResult = await appService.deleteOrderTable(orderID);
+    const { orderId } = req.body;
+    const deleteResult = await appService.deleteOrderTable(orderId);
     if (deleteResult) {
         res.json({ success: true });
     } else {
@@ -148,8 +148,8 @@ router.get('/invoiceTable', async (req, res) => {
 });
 
 router.post('/insert-invoiceTable', async (req, res) => {
-    const { invoiceID, issueDate, status, orderID } = req.body;
-    const insertResult = await appService.insertInvoiceTable(invoiceID, issueDate, status, orderID);
+    const { invoiceId, issueDate, status, orderId } = req.body;
+    const insertResult = await appService.insertInvoiceTable(invoiceId, issueDate, status, orderId);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -158,8 +158,8 @@ router.post('/insert-invoiceTable', async (req, res) => {
 });
 
 router.post('/update-invoiceTable', async (req, res) => {
-    const { invoiceID, attribute, newValue } = req.body;
-    const updateResult = await appService.updateInvoiceTable(invoiceID, attribute, newValue);
+    const { invoiceId, attribute, newValue } = req.body;
+    const updateResult = await appService.updateInvoiceTable(invoiceId, attribute, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
@@ -181,8 +181,8 @@ router.get('/select-invoiceTable', async (req, res) => {
 });
 
 router.delete('/delete-invoiceTable', async (req, res) => {
-    const { invoiceID } = req.body;
-    const deleteResult = await appService.deleteInvoiceTable(invoiceID);
+    const { invoiceId } = req.body;
+    const deleteResult = await appService.deleteInvoiceTable(invoiceId);
     if (deleteResult) {
         res.json({ success: true });
     } else {
@@ -199,8 +199,8 @@ router.get('/customerTable', async (req, res) => {
 });
 
 router.post('/insert-customerTable', async (req, res) => {
-    const { customerID, phoneNumber, email, name } = req.body;
-    const insertResult = await appService.insertCustomerTable(customerID, phoneNumber, email, name);
+    const { customerId, phoneNumber, email, name } = req.body;
+    const insertResult = await appService.insertCustomerTable(customerId, phoneNumber, email, name);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -209,8 +209,8 @@ router.post('/insert-customerTable', async (req, res) => {
 });
 
 router.post('/update-customerTable', async (req, res) => {
-    const { customerID, attribute, newValue } = req.body;
-    const updateResult = await appService.updateCustomerTable(customerID, attribute, newValue);
+    const { customerId, attribute, newValue } = req.body;
+    const updateResult = await appService.updateCustomerTable(customerId, attribute, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
@@ -232,8 +232,8 @@ router.get('/select-customerTable', async (req, res) => {
 });
 
 router.delete('/delete-customerTable', async (req, res) => {
-    const { customerID } = req.body;
-    const deleteResult = await appService.deleteCustomerTable(customerID);
+    const { customerId } = req.body;
+    const deleteResult = await appService.deleteCustomerTable(customerId);
     if (deleteResult) {
         res.json({ success: true });
     } else {
@@ -250,9 +250,9 @@ router.get('/employeeTable', async (req, res) => {
 });
 
 router.post('/insert-employeeTable', async (req, res) => {
-    const { employeeID, sin, phoneNumber, email, workLocation } = req.body;
+    const { employeeId, sin, phoneNumber, email, workLocation } = req.body;
     const insertResult = await appService.insertEmployeeTable(
-        employeeID,
+        employeeId,
         sin,
         phoneNumber,
         email,
@@ -266,8 +266,8 @@ router.post('/insert-employeeTable', async (req, res) => {
 });
 
 router.post('/update-employeeTable', async (req, res) => {
-    const { employeeID, attribute, newValue } = req.body;
-    const updateResult = await appService.updateEmployeeTable(employeeID, attribute, newValue);
+    const { employeeId, attribute, newValue } = req.body;
+    const updateResult = await appService.updateEmployeeTable(employeeId, attribute, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
@@ -289,8 +289,8 @@ router.get('/select-employeeTable', async (req, res) => {
 });
 
 router.delete('/delete-employeeTable', async (req, res) => {
-    const { employeeID } = req.body;
-    const deleteResult = await appService.deleteEmployeeTable(employeeID);
+    const { employeeId } = req.body;
+    const deleteResult = await appService.deleteEmployeeTable(employeeId);
     if (deleteResult) {
         res.json({ success: true });
     } else {
@@ -307,8 +307,8 @@ router.get('/dispatcherTable', async (req, res) => {
 });
 
 router.post('/insert-dispatcherTable', async (req, res) => {
-    const { employeeID, dispatcherID } = req.body;
-    const insertResult = await appService.insertDispatcherTable(employeeID, dispatcherID);
+    const { employeeId, dispatcherId } = req.body;
+    const insertResult = await appService.insertDispatcherTable(employeeId, dispatcherId);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -330,8 +330,8 @@ router.get('/select-dispatcherTable', async (req, res) => {
 });
 
 router.delete('/delete-dispatcherTable', async (req, res) => {
-    const { employeeID } = req.body;
-    const deleteResult = await appService.deleteDispatcherTable(employeeID);
+    const { employeeId } = req.body;
+    const deleteResult = await appService.deleteDispatcherTable(employeeId);
     if (deleteResult) {
         res.json({ success: true });
     } else {
@@ -348,8 +348,8 @@ router.get('/driversTable', async (req, res) => {
 });
 
 router.post('/insert-driversTable', async (req, res) => {
-    const { employeeID, licenseID, hoursDriven } = req.body;
-    const insertResult = await appService.insertDriversTable(employeeID, licenseID, hoursDriven);
+    const { employeeId, licenseId, hoursDriven } = req.body;
+    const insertResult = await appService.insertDriversTable(employeeId, licenseId, hoursDriven);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -358,8 +358,8 @@ router.post('/insert-driversTable', async (req, res) => {
 });
 
 router.post('/update-driversTable', async (req, res) => {
-    const { employeeID, attribute, newValue } = req.body;
-    const updateResult = await appService.updateDriversTable(employeeID, attribute, newValue);
+    const { employeeId, attribute, newValue } = req.body;
+    const updateResult = await appService.updateDriversTable(employeeId, attribute, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
@@ -381,8 +381,8 @@ router.get('/select-driversTable', async (req, res) => {
 });
 
 router.delete('/delete-driversTable', async (req, res) => {
-    const { employeeID } = req.body;
-    const deleteResult = await appService.deleteDriversTable(employeeID);
+    const { employeeId } = req.body;
+    const deleteResult = await appService.deleteDriversTable(employeeId);
     if (deleteResult) {
         res.json({ success: true });
     } else {
@@ -456,8 +456,8 @@ router.get('/driverDrivesTable', async (req, res) => {
 });
 
 router.post('/insert-driverDrivesTable', async (req, res) => {
-    const { plateNumber, employeeID } = req.body;
-    const insertResult = await appService.insertDriverDrivesTable(plateNumber, employeeID);
+    const { plateNumber, employeeId } = req.body;
+    const insertResult = await appService.insertDriverDrivesTable(plateNumber, employeeId);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -479,8 +479,8 @@ router.get('/select-driverDrivesTable', async (req, res) => {
 });
 
 router.delete('/delete-driverDrivesTable', async (req, res) => {
-    const { plateNumber, employeeID } = req.body;
-    const deleteResult = await appService.deleteDriverDrivesTable(plateNumber, employeeID);
+    const { plateNumber, employeeId } = req.body;
+    const deleteResult = await appService.deleteDriverDrivesTable(plateNumber, employeeId);
     if (deleteResult) {
         res.json({ success: true });
     } else {
@@ -497,8 +497,8 @@ router.get('/assignedTable', async (req, res) => {
 });
 
 router.post('/insert-assignedTable', async (req, res) => {
-    const { plateNumber, employeeID, orderID } = req.body;
-    const insertResult = await appService.insertAssignedTable(plateNumber, employeeID, orderID);
+    const { plateNumber, employeeId, orderId } = req.body;
+    const insertResult = await appService.insertAssignedTable(plateNumber, employeeId, orderId);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -507,8 +507,8 @@ router.post('/insert-assignedTable', async (req, res) => {
 });
 
 router.post('/update-assignedTable', async (req, res) => {
-    const { orderID, attribute, newValue } = req.body;
-    const updateResult = await appService.updateAssignedTable(orderID, attribute, newValue);
+    const { orderId, attribute, newValue } = req.body;
+    const updateResult = await appService.updateAssignedTable(orderId, attribute, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
@@ -530,8 +530,8 @@ router.get('/select-assignedTable', async (req, res) => {
 });
 
 router.delete('/delete-assignedTable', async (req, res) => {
-    const { orderID } = req.body;
-    const deleteResult = await appService.deleteAssignedTable(orderID);
+    const { orderId } = req.body;
+    const deleteResult = await appService.deleteAssignedTable(orderId);
     if (deleteResult) {
         res.json({ success: true });
     } else {
