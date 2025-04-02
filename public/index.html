@@ -59,6 +59,7 @@
             <button id="hideShowUpdateOrder">Update</button>
             <button id="hideShowSelectOrder">Select</button>
             <button id="hideShowProjectOrder">Project</button>
+            <button id="hideShowCountCustomerOrder">Count Customers</button>
         </div>
             
         <div id="insertOrderPage" class="hidden">
@@ -204,6 +205,17 @@
                     <button type="submit"> Project </button> <br>
                 </div>
                 <div id="projectResult" style="margin-top: 10px;"></div>
+            </form>
+        </div>
+
+        <div id="countCustomerOrderPage" class="hidden">
+            <h3>Count Customers</h3>
+            <form id="countCustomerOrderTable">
+                <div class="tableDiv form-group" style="max-width: 400px;">
+                    Count the number of orders for each customer.
+                    <button type="submit"> Submit </button> <br>
+                </div>
+                <div id="countCustomerResult"></div>
             </form>
         </div>
     </div>

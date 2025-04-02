@@ -229,6 +229,21 @@ async function projectOrderTable(projectQuery) {
     });
 }
 
+async function countCustomerOrderTable() {
+    return await withOracleDB(async (connection) => {
+        // console.log(selectQuery);
+        const result = await connection.execute(
+            `SELECT customerId, COUNT(*) AS orderCount
+            FROM ORDERTABLE
+            GROUP BY customerId
+            ORDER BY orderCount DESC`
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function deleteOrderTable(orderId) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -787,6 +802,7 @@ module.exports = {
     updateOrderTable,
     selectOrderTable,
     projectOrderTable,
+    countCustomerOrderTable,
     deleteOrderTable,
     insertInvoiceTable,
     updateInvoiceTable,
