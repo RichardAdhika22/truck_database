@@ -157,7 +157,7 @@ async function insertOrderTable(orderId, customerId, weight, routeId, orderDate,
 async function fetchOrderTableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime, invoiceId, dispatcherId FROM ORDERTABLE`
+            `SELECT orderId, customerId, weight, routeId, TO_CHAR(orderDate, 'YYYY-MM-DD'), departureTime, arrivalTime, invoiceId, dispatcherId FROM ORDERTABLE`
         );
         return result.rows;
     }).catch(() => {
@@ -191,7 +191,7 @@ async function updateOrderTable(orderId, attribute, newValue) {
 async function selectOrderTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT orderId, customerId, weight, routeId, orderDate, departureTime, arrivalTime FROM ORDERTABLE WHERE ${selectQuery}`
+            `SELECT orderId, customerId, weight, routeId, TO_CHAR(orderDate, 'YYYY-MM-DD'), departureTime, arrivalTime FROM ORDERTABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {
@@ -201,6 +201,11 @@ async function selectOrderTable(selectQuery) {
 
 async function projectOrderTable(projectQuery) {
     return await withOracleDB(async (connection) => {
+        if (projectQuery.includes("orderDate")) {
+            projectQuery = projectQuery.replace(/\borderDate\b/g, "TO_CHAR(orderDate, 'YYYY-MM-DD')");
+        }
+        
+        console.log(projectQuery);
         const result = await connection.execute(
             `SELECT ${projectQuery} FROM ORDERTABLE`
         );
@@ -269,7 +274,7 @@ async function updateInvoiceTable(invoiceId, attribute, newValue) {
 async function selectInvoiceTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT invoiceId, issueDate, status, orderId FROM INVOICETABLE WHERE ${selectQuery}`
+            `SELECT invoiceId, issueDate, status FROM INVOICETABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {

@@ -70,6 +70,8 @@ function fetchTableData() {
     fetchAndDisplayTable('routeTable');
     fetchAndDisplayTable('orderTable');
     fetchAndDisplayTable('locationTable');
+    fetchAndDisplayTable('invoiceTable');
+    fetchAndDisplayTable('customerTable');
 }
 
 async function resetTables() {
@@ -372,15 +374,14 @@ async function selectOrderTable() {
     });
 
     const responseData = await response.json();
-    // const messageElement = document.getElementById('selectOrderResultMsg');
     const content = responseData.data;
 
     console.log(content);
-    const selectOrderTable = document.getElementById('selectOrderTable');
+    const showResult = document.getElementById('updateResult');
+    showResult.innerHTML = "";
+
     if (content.length === 0) {
-        const noResultsMessage = document.createElement('div');
-        noResultsMessage.textContent = 'No results found.';
-        selectOrderTable.appendChild(noResultsMessage);
+        showResult.textContent="No data that matches the conditions";
     } else {
         const tableResult = document.createElement('table');
         tableResult.id = 'selectOrderTableResult';
@@ -398,7 +399,7 @@ async function selectOrderTable() {
         </thead>
         <tbody>
         </tbody>`;
-        selectOrderTable.appendChild(tableResult);
+        showResult.appendChild(tableResult);
 
         content.forEach(user => {
             const row = tableResult.insertRow();
@@ -429,14 +430,12 @@ async function projectOrderTable() {
         }
     });
     const responseData = await response.json();
-    // const messageElement = document.getElementById('selectOrderResultMsg');
     const content = responseData.data;
+    const showResult = document.getElementById('projectResult');
+    showResult.innerHTML="";
 
-    const projectOrderTable = document.getElementById('projectOrderTable');
     if (content.length === 0) {
-        const noResultsMessage = document.createElement('div');
-        noResultsMessage.textContent = 'No results found.';
-        projectOrderTable.appendChild(noResultsMessage);
+        showResult.textContent="No data found!";
     } else {
         const tableResult = document.createElement('table');
         tableResult.id = 'projectOrderTableResult';
@@ -446,7 +445,15 @@ async function projectOrderTable() {
 
         selectedValues.forEach((value) => {
             const th = document.createElement('th');
-            th.textContent = value;
+            if (value === "customerId") th.textContent = "Customer ID";
+            else if (value === "weight") th.textContent = "Weight";
+            else if (value === "routeId") th.textContent = "Route ID";
+            else if (value === "date") th.textContent = "Date";
+            else if (value === "departureTime") th.textContent = "Departure Time";
+            else if (value === "arrivalTime") th.textContent = "Arrival Time";
+            else if (value === "invoiceId") th.textContent = "Invoice ID";
+            else if (value === "dispatcherId") th.textContent = "Dispatcher ID";
+            else th.textContent = value;
             headerRow.appendChild(th);
         });
 
@@ -455,8 +462,8 @@ async function projectOrderTable() {
 
         const tbody = document.createElement('tbody');
         tableResult.appendChild(tbody);
-        projectOrderTable.innerHTML = ''; 
-        projectOrderTable.appendChild(tableResult);
+        tableResult.border = "1";
+        showResult.appendChild(tableResult);
 
         content.forEach(user => {
             const row = tableResult.insertRow();
@@ -478,6 +485,8 @@ window.onload = function() {
     document.getElementById('hideShowRoute').addEventListener('click', function() {hideShow('routePageContent');});
     document.getElementById('hideShowOrder').addEventListener('click', function() {hideShow('orderPageContent');});
     document.getElementById('hideShowLocation').addEventListener('click', function() {hideShow('locationPageContent');});
+    document.getElementById('hideShowInvoice').addEventListener('click', function() {hideShow('invoicePageContent');});
+    document.getElementById('hideShowCustomer').addEventListener('click', function() {hideShow('customerPageContent');});
 
     document.getElementById("resetTables").addEventListener("click", resetTables);
     document.getElementById("insertRouteTable").addEventListener("submit", insertRouteTable);

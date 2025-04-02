@@ -168,6 +168,8 @@
                 <button id="resetConditionUpdate" type="button">Reset</button>
                 <button type="submit"> Select </button> <br>
             </div>
+            <div id="updateResult">
+            </div>
         </form>
 
         <h3>Choose columns to view (projection)</h3>
@@ -177,6 +179,8 @@
                 <label><input type="checkbox" name="attributes" value="weight" style="width:20px;"> Weight</label><br>
                 <label><input type="checkbox" name="attributes" value="routeId" style="width:20px;"> Route ID</label><br>
                 <label><input type="checkbox" name="attributes" value="orderDate" style="width:20px;"> Date</label><br>
+            </div>
+            <div class="form-group">
                 <label><input type="checkbox" name="attributes" value="departureTime" style="width:20px;"> Departure Time</label><br>
                 <label><input type="checkbox" name="attributes" value="arrivalTime" style="width:20px;"> Arrival Time</label><br>
                 <label><input type="checkbox" name="attributes" value="invoiceId" style="width:20px;"> Invoice ID</label><br>
@@ -185,6 +189,7 @@
             <div class="submitAndResult">
                 <button type="submit"> Project </button> <br>
             </div>
+            <div id="projectResult" style="margin-top: 10px;"></div>
         </form>
     </div>
 
@@ -267,6 +272,47 @@
                     <th>Trucks Parked</th>
                     <th>Close Time</th>
                     <th>Open Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>    
+    </div>
+
+    <br><hr><br>
+
+    <div class="pageHeading">
+        <h2 class="pageTitle">Invoices</h2>
+        <button id="hideShowInvoice">Hide/Show</button>
+    </div>
+    <div id="invoicePageContent" class="hidden">
+        <table id="invoiceTable" border="1">
+            <thead>
+                <tr>
+                    <th>Invoice ID</th>
+                    <th>Issue Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>    
+    </div>
+
+    <br><hr><br>
+
+    <div class="pageHeading">
+        <h2 class="pageTitle">Customers</h2>
+        <button id="hideShowCustomer">Hide/Show</button>
+    </div>
+    <div id="customerPageContent" class="hidden">
+        <table id="customerTable" border="1">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Name</th>
                 </tr>
             </thead>
             <tbody>
