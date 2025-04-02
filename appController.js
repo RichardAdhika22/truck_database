@@ -99,7 +99,6 @@ router.post("/update-orderTable", async (req, res) => {
 
 router.get('/select-orderTable', async (req, res) => {
     const { selectQuery } = req.query;  
-    console.log(selectQuery);
     if (!selectQuery) {
         return res.status(400).json({ error: "selectQuery parameter is required" });
     }

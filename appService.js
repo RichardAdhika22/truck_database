@@ -303,7 +303,7 @@ async function updateInvoiceTable(invoiceId, attribute, newValue) {
 async function selectInvoiceTable(selectQuery) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT invoiceId, issueDate, status FROM INVOICETABLE WHERE ${selectQuery}`
+            `SELECT invoiceId, TO_CHAR(issueDate, 'YYYY-MM-DD'), status FROM INVOICETABLE WHERE ${selectQuery}`
         );
         return result.rows;
     }).catch(() => {

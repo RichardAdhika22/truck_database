@@ -330,6 +330,12 @@ function handleUpdateOptions() {
     } else if (selectedValue === "arrivalTime") {
         inputContainer.innerHTML = `<label for="newOrderValue">New Arrival Time: </label>
                 <input type="time" id="newOrderValue">`
+    } else if (selectedValue === "invoiceId") {
+        inputContainer.innerHTML = `<label for="newOrderValue">New Invoice ID: </label>
+                <input type="text" id="newOrderValue">`
+    } else if (selectedValue === "dispatcherId") {
+        inputContainer.innerHTML = `<label for="newOrderValue">New Dispatcher ID: </label>
+                <input type="text" id="newOrderValue">`
     }
 }
 
@@ -349,12 +355,15 @@ function addConditionUpdate() {
     <div class="form-group">
         <select id="selectOptions${conditionCount}" name="selectOptions${conditionCount}" required>
             <option value="" disabled selected>Select an attribute</option>
+            <option value="orderId">Order ID</option>
             <option value="customerId">Customer ID</option>
             <option value="weight">Weight</option>
             <option value="routeId">Route ID</option>
             <option value="orderDate">Date</option>
             <option value="departureTime">Departure Time</option>
             <option value="arrivalTime">Arrival Time</option>
+            <option value="invoiceId">Invoice ID</option>
+            <option value="dispatcherId">Dispatcher ID</option>
         </select>
     </div>
 
@@ -384,24 +393,33 @@ function handleSelectOptions(count) {
     inputContainer.innerHTML = '';
 
     // Add an input box based on the selected option
-    if (selectedValue === "customerId") {
-        inputContainer.innerHTML = `<label for="selectValue${count}">New Customer ID: </label>
+    if (selectedValue === "orderId") {
+        inputContainer.innerHTML = `<label for="selectValue${count}">Order ID: </label>
+                <input type="text" id="selectValue${count}" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
+    } else if (selectedValue === "customerId") {
+        inputContainer.innerHTML = `<label for="selectValue${count}">Customer ID: </label>
                 <input type="text" id="selectValue${count}" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
     } else if (selectedValue === "weight") {
-        inputContainer.innerHTML = `<label for="selectValue${count}">New Weight: </label>
+        inputContainer.innerHTML = `<label for="selectValue${count}">Weight: </label>
                 <input type="number" id="selectValue${count}" placeholder="Enter Item Weight (in Kg)" required>`;
     } else if (selectedValue === "routeId") {
-        inputContainer.innerHTML = `<label for="selectValue${count}">New Route ID: </label>
+        inputContainer.innerHTML = `<label for="selectValue${count}">Route ID: </label>
                 <input type="text" id="selectValue${count}" placeholder="6-characters ID" required minlength="6" maxlength="6">`;
     } else if (selectedValue === "orderDate") {
-        inputContainer.innerHTML = `<label for="selectValue${count}" required>New Date :</label>
+        inputContainer.innerHTML = `<label for="selectValue${count}" required>Date :</label>
                 <input type="date" id="selectValue${count}">`
     } else if (selectedValue === "departureTime") {
-        inputContainer.innerHTML = `<label for="selectValue${count}" required>New Departure Time: </label>
+        inputContainer.innerHTML = `<label for="selectValue${count}" required>Departure Time: </label>
                 <input type="time" id="selectValue${count}">`
     } else if (selectedValue === "arrivalTime") {
-        inputContainer.innerHTML = `<label for="selectValue${count}" required>New Arrival Time: </label>
+        inputContainer.innerHTML = `<label for="selectValue${count}" required>Arrival Time: </label>
                 <input type="time" id="selectValue${count}">`
+    } else if (selectedValue === "invoiceId") {
+        inputContainer.innerHTML = `<label for="selectValue${count}" required>Invoice ID: </label>
+                <input type="text" id="selectValue${count}">`
+    } else if (selectedValue === "dispatcherId") {
+        inputContainer.innerHTML = `<label for="selectValue${count}" required>Dispatcher ID: </label>
+                <input type="text" id="selectValue${count}">`
     }
 }
 
@@ -427,9 +445,15 @@ async function selectOrderTable() {
             showResult.textContent="Please input the conditions!";
             return;
         }
-        let selectValue = document.getElementById(`selectValue${i}`).value;
+
+        const selectDiv = document.getElementById(`selectValue${i}`);
+
+        let selectValue = selectDiv.value;
         if (selectOptions === "orderDate") selectValue =  `TO_DATE('${selectValue}', 'YYYY-MM-DD')`;
-        console.log(selectValue);
+        if (selectDiv.type !== 'number') {
+            selectValue = `'${selectValue}'`;
+        }
+        // console.log(selectValue);
 
         if (i === 1) {
             selectQuery += `${selectOptions} ${conditionOperation} ${selectValue}`;
@@ -450,7 +474,7 @@ async function selectOrderTable() {
     const responseData = await response.json();
     const content = responseData.data;
 
-    console.log(content);
+    // console.log(content);
 
     if (content.length === 0) {
         showResult.textContent="No data that matches the conditions";
