@@ -248,7 +248,7 @@ async function projectOrderTable(projectQuery) {
         
         console.log(projectQuery);
         const result = await connection.execute(
-            `SELECT ${projectQuery} FROM ORDERTABLE`
+            `SELECT DISTINCT ${projectQuery} FROM ORDERTABLE`
         );
         return result.rows;
     }).catch(() => {
