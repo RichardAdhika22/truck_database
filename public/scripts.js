@@ -391,6 +391,7 @@ let conditionCount = 1;
 function addConditionUpdate() {
     event.preventDefault();
     conditionCount++;
+    console.log(conditionCount);
     const newFormGroup = document.createElement('div');
     newFormGroup.classList.add('tableDiv');
 
@@ -428,8 +429,11 @@ function addConditionUpdate() {
 
     let submitUpdate = document.getElementById('submitUpdate');
     document.getElementById('selectOrderTable').insertBefore(newFormGroup, submitUpdate);
-
-    document.getElementById(`selectOptions${conditionCount}`).addEventListener('change', function() {handleSelectOptions(conditionCount);});
+    document.getElementById(`selectOptions${conditionCount}`).addEventListener('change', 
+        (function(count) {  // Capture the correct value of conditionCount
+            return function() { handleSelectOptions(count); };
+        })(conditionCount)
+    );
 }
 
 function handleSelectOptions(count) {
@@ -464,10 +468,10 @@ function handleSelectOptions(count) {
                 <input type="time" id="selectValue${count}">`
     } else if (selectedValue === "invoiceId") {
         inputContainer.innerHTML = `<label for="selectValue${count}" required>Invoice ID: </label>
-                <input type="text" id="selectValue${count}">`
+                <input type="text" id="selectValue${count}" placeholder="6-characters ID">`
     } else if (selectedValue === "dispatcherId") {
         inputContainer.innerHTML = `<label for="selectValue${count}" required>Dispatcher ID: </label>
-                <input type="text" id="selectValue${count}">`
+                <input type="text" id="selectValue${count}" placeholder="6-characters ID">`
     }
 }
 
