@@ -1,6 +1,4 @@
 # Side Note
 
-**We understand that foreign keys need to be updated even though oracle does not allow it**
-
-**We changed our schema a little to better model a dispatching company, more details are in the project description pdf**
+**The foreign keys need to be updated when the corresponding data entry changed but oracle does not allow it**
 
