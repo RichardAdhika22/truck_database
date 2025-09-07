@@ -15,7 +15,7 @@ Refer to the [ER Diagram](https://github.com/RichardAdhika22/truck_database/blob
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
 Follow the guide in the following [link](https://www.students.cs.ubc.ca/~cs-304/resources/javascript-oracle-resources/node-setup.html) if you wish to run the program.
-This project (especially its UI) is also based on the example given in the link above.
+This project is also based on the example given in the link above.
 
 ## Side Note
 
