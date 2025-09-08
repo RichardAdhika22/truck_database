@@ -21,3 +21,7 @@ This project is also based on the example given in the link above.
 
 The foreign keys need to be updated when the corresponding data entry changed but oracle does not allow it
 
+## Preview
+
+![Preview](preview.jpg)
+
