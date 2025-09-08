@@ -23,5 +23,5 @@ The foreign keys need to be updated when the corresponding data entry changed bu
 
 ## Preview
 
-![Preview](public\preview.jpg)
+![Preview](public/preview.jpg)
 
